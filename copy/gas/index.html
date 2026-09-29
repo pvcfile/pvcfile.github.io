@@ -1,21 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
+  <base target="_top">
+
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <title>QR Clipboard</title>
 
   <style>
-    /* ==================================================
-       1. HE THONG MAU XANH REU
-    ================================================== */
+
+    /* =========================================================
+       BIEN GIAO DIEN
+       ========================================================= */
 
     :root {
-      color-scheme: light;
 
       --mauChinh: #526747;
       --mauChinhDam: #34452F;
@@ -31,99 +34,103 @@
       --mauVien: #DCE2D6;
 
       --mauXoa: #A13F3F;
-      --mauXoaNen: #F8EAE7;
+      --mauXoaNhe: #F8EAE7;
 
-      --bongThe: 0 2px 10px rgba(45, 60, 39, 0.06);
+      --banKinhLon: 24px;
+      --banKinhVua: 18px;
+      --banKinhNho: 12px;
 
-      --banKinhThe: 22px;
-      --banKinhNut: 14px;
+      --bongThe:
+        0 4px 18px rgba(45, 60, 40, 0.07);
 
-      --chieuRongToiDa: 760px;
+      --bongTheLon:
+        0 10px 30px rgba(45, 60, 40, 0.10);
+
+      --thoiGian: 0.2s ease;
     }
 
-    /* ==================================================
-       2. RESET
-    ================================================== */
+
+    /* =========================================================
+       RESET
+       ========================================================= */
 
     * {
       box-sizing: border-box;
     }
 
-    html {
-      min-height: 100%;
-      -webkit-text-size-adjust: 100%;
-    }
-
+    html,
     body {
       margin: 0;
-      min-height: 100vh;
-      background: var(--mauNen);
-      color: var(--mauChu);
+      padding: 0;
+
+      width: 100%;
+      min-height: 100%;
 
       font-family:
+        Inter,
         system-ui,
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
 
-      -webkit-font-smoothing: antialiased;
+      background: var(--mauNen);
+      color: var(--mauChu);
+    }
+
+    body {
+      min-height: 100vh;
     }
 
     button,
     textarea {
-      font: inherit;
+      font-family: inherit;
     }
 
     button {
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    button:focus-visible,
-    textarea:focus-visible {
-      outline: 2px solid var(--mauChinh);
-      outline-offset: 3px;
-    }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    /* ==================================================
-       3. KHUNG UNG DUNG
-    ================================================== */
+    /* =========================================================
+       APP
+       ========================================================= */
 
     #ungDung {
       width: 100%;
       min-height: 100vh;
     }
 
-    #khungUngDung {
+    .khungUngDung {
       width: 100%;
-      max-width: var(--chieuRongToiDa);
-      min-height: 100vh;
+      max-width: 760px;
 
       margin: 0 auto;
 
       padding:
-        24px
-        18px
-        calc(36px + env(safe-area-inset-bottom));
+        20px
+        16px
+        40px;
     }
+
+
+    /* =========================================================
+       VIEW
+       ========================================================= */
 
     .view {
       display: none;
-      width: 100%;
+
+      animation:
+        hienView 0.2s ease;
     }
 
     .view.dangHien {
       display: block;
-      animation: hienView 180ms ease;
     }
 
     @keyframes hienView {
+
       from {
         opacity: 0;
         transform: translateY(5px);
@@ -133,1736 +140,3410 @@
         opacity: 1;
         transform: translateY(0);
       }
+
     }
 
-    /* ==================================================
-       4. TIEU DE
-    ================================================== */
 
-    .dauTrang {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
+    /* =========================================================
+       TIEU DE
+       ========================================================= */
+
+    .tieuDeUngDung {
+      margin:
+        10px
+        0
+        8px;
+
+      text-align: center;
+
+      font-size: 26px;
+      line-height: 1.2;
+      font-weight: 700;
+
+      color: var(--mauChinhDam);
     }
 
-    .nutQuayLai {
-      flex-shrink: 0;
+    .moTaUngDung {
+      max-width: 520px;
 
-      width: 44px;
-      height: 44px;
+      margin:
+        0
+        auto
+        26px;
 
-      display: grid;
-      place-items: center;
+      text-align: center;
 
-      border-radius: 50%;
-      background: transparent;
-      color: var(--mauChu);
-
-      font-size: 25px;
-    }
-
-    .nutQuayLai:hover {
-      background: var(--mauChinhNhe);
-    }
-
-    .tieuDe {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 750;
-      letter-spacing: -0.5px;
-    }
-
-    .moTa {
-      margin: 5px 0 0;
       color: var(--mauChuPhu);
+
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    /* ==================================================
-       5. VIEW BAT DAU
-    ================================================== */
 
-    .manHinhBatDau {
-      min-height: calc(100vh - 60px);
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .the {
+      background: var(--mauThe);
+
+      border:
+        1px solid
+        var(--mauVien);
+
+      border-radius:
+        var(--banKinhLon);
+
+      box-shadow:
+        var(--bongThe);
+
+      padding: 20px;
+    }
+
+
+    /* =========================================================
+       VIEW BAT DAU
+       ========================================================= */
+
+    .khungBatDau {
+      min-height:
+        calc(100vh - 80px);
 
       display: flex;
+
       flex-direction: column;
+
       justify-content: center;
     }
 
-    .logo {
-      width: 76px;
-      height: 76px;
-
+    .nhomNutBatDau {
       display: grid;
-      place-items: center;
 
-      margin: 0 auto 22px;
+      grid-template-columns:
+        1fr
+        1fr;
 
-      border-radius: 25px;
-      background: var(--mauChinhNhe);
-      color: var(--mauChinhDam);
-
-      font-size: 38px;
-      font-weight: 700;
-    }
-
-    .tieuDeBatDau {
-      margin: 0;
-      text-align: center;
-
-      font-size: 32px;
-      font-weight: 750;
-      letter-spacing: -1px;
-    }
-
-    .moTaBatDau {
-      max-width: 340px;
-
-      margin: 10px auto 34px;
-
-      text-align: center;
-      line-height: 1.6;
-
-      color: var(--mauChuPhu);
-    }
-
-    .luoiLuaChon {
-      display: grid;
-      grid-template-columns: 1fr;
       gap: 14px;
+
+      margin-top: 20px;
     }
 
-    .nutLuaChon {
-      width: 100%;
-      min-height: 148px;
+    .nutBatDau {
+      min-height: 150px;
 
-      padding: 23px;
+      border:
+        1px solid
+        var(--mauVien);
 
-      text-align: left;
+      border-radius:
+        var(--banKinhLon);
 
-      border: 1px solid var(--mauVien);
-      border-radius: var(--banKinhThe);
+      background:
+        var(--mauThe);
 
-      background: var(--mauThe);
-      color: var(--mauChu);
+      color:
+        var(--mauChinhDam);
 
-      box-shadow: var(--bongThe);
+      box-shadow:
+        var(--bongThe);
+
+      padding: 20px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 10px;
 
       transition:
-        border-color 150ms ease,
-        background 150ms ease,
-        transform 150ms ease;
+        transform var(--thoiGian),
+        box-shadow var(--thoiGian),
+        background var(--thoiGian);
     }
 
-    .nutLuaChon:hover {
-      border-color: var(--mauChinh);
-      background: var(--mauChinhRatNhe);
+    .nutBatDau:hover {
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        var(--bongTheLon);
+
+      background:
+        var(--mauChinhRatNhe);
     }
 
-    .nutLuaChon:active {
-      transform: scale(0.99);
+    .bieuTuongBatDau {
+      font-size: 38px;
+      line-height: 1;
     }
 
-    .bieuTuongLuaChon {
-      width: 48px;
-      height: 48px;
-
-      display: grid;
-      place-items: center;
-
-      margin-bottom: 17px;
-
-      border-radius: 16px;
-      background: var(--mauChinhNhe);
-      color: var(--mauChinhDam);
-
-      font-size: 25px;
+    .tenNutBatDau {
+      font-size: 17px;
       font-weight: 700;
     }
 
-    .tieuDeLuaChon {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .moTaLuaChon {
-      margin-top: 6px;
+    .moTaNutBatDau {
       color: var(--mauChuPhu);
-      font-size: 14px;
-      line-height: 1.5;
-    }
 
-    /* ==================================================
-       6. VIEW QR
-    ================================================== */
-
-    .khuVucQR {
-      padding: 22px;
+      font-size: 12px;
 
       text-align: center;
+    }
 
-      background: var(--mauThe);
-      border: 1px solid var(--mauVien);
-      border-radius: var(--banKinhThe);
 
-      box-shadow: var(--bongThe);
+    /* =========================================================
+       HEADER VIEW
+       ========================================================= */
+
+    .tieuDeView {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      margin-bottom: 18px;
+    }
+
+    .tieuDeViewTrai {
+      min-width: 0;
+    }
+
+    .tieuDeView h2 {
+      margin: 0;
+
+      color:
+        var(--mauChinhDam);
+
+      font-size: 22px;
+    }
+
+    .tieuDeView p {
+      margin:
+        5px
+        0
+        0;
+
+      color:
+        var(--mauChuPhu);
+
+      font-size: 13px;
+    }
+
+
+    /* =========================================================
+       NUT
+       ========================================================= */
+
+    .nut {
+      min-height: 44px;
+
+      padding:
+        10px
+        17px;
+
+      border: none;
+
+      border-radius: 999px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      font-size: 14px;
+      font-weight: 650;
+
+      transition:
+        transform var(--thoiGian),
+        box-shadow var(--thoiGian),
+        opacity var(--thoiGian),
+        background var(--thoiGian);
+    }
+
+    .nut:hover {
+      transform:
+        translateY(-1px);
+    }
+
+    .nut:disabled {
+      opacity: 0.55;
+
+      cursor: not-allowed;
+
+      transform: none;
+    }
+
+    .nutChinh {
+      background:
+        var(--mauChinh);
+
+      color: #FFFFFF;
+
+      box-shadow:
+        0 4px 12px
+        rgba(82, 103, 71, 0.18);
+    }
+
+    .nutChinh:hover {
+      background:
+        var(--mauChinhDam);
+    }
+
+    .nutPhu {
+      background:
+        var(--mauChinhNhe);
+
+      color:
+        var(--mauChinhDam);
+    }
+
+    .nutTrang {
+      background:
+        #FFFFFF;
+
+      color:
+        var(--mauChinhDam);
+
+      border:
+        1px solid
+        var(--mauVien);
+    }
+
+    .nutXoa {
+      background:
+        var(--mauXoaNhe);
+
+      color:
+        var(--mauXoa);
+    }
+
+
+    /* =========================================================
+       QR
+       ========================================================= */
+
+    .khungQR {
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      padding:
+        22px
+        15px
+        25px;
+
+      margin-bottom: 20px;
+
+      background:
+        var(--mauChinhRatNhe);
+
+      border-radius:
+        var(--banKinhLon);
+
+      border:
+        1px solid
+        var(--mauVien);
+    }
+
+    .khungQR.an {
+      display: none;
     }
 
     .anhQR {
       display: block;
 
-      width: min(100%, 300px);
+      width:
+        min(100%, 330px);
+
+      height: auto;
+
       aspect-ratio: 1 / 1;
 
-      margin: 0 auto;
-
       object-fit: contain;
-      border-radius: 10px;
+
+      background:
+        #FFFFFF;
+
+      border-radius:
+        16px;
+
+      padding: 10px;
+
+      border:
+        1px solid
+        var(--mauVien);
     }
 
-    .loiAnhQR {
-      display: none;
-
-      padding: 25px 10px;
-
-      color: var(--mauChuPhu);
-      font-size: 14px;
-    }
-
-    .chuQR {
-      margin: 15px 0 0;
-
-      color: var(--mauChuPhu);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* ==================================================
-       7. DANH SACH NOI DUNG
-    ================================================== */
-
-    .tieuDeDanhSach {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-
-      margin: 26px 0 14px;
-    }
-
-    .tieuDeDanhSach h2 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 750;
-    }
-
-    .soLuong {
-      flex-shrink: 0;
-
-      padding: 6px 10px;
-
-      border-radius: 100px;
-      background: var(--mauChinhNhe);
-      color: var(--mauChinhDam);
-
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    #danhSachNoiDung {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      max-height: 55vh;
-      overflow-y: auto;
-
-      padding: 2px 3px 8px;
-
-      overscroll-behavior: contain;
-    }
-
-    .theNoiDung {
-      display: flex;
-      flex-direction: column;
-
-      min-height: 165px;
-      padding: 16px;
-
-      background: var(--mauThe);
-      border: 1px solid var(--mauVien);
-      border-radius: 18px;
-
-      box-shadow: var(--bongThe);
-    }
-
-    .thoiGian {
-      margin-bottom: 12px;
-
-      color: var(--mauChuPhu);
-      font-size: 12px;
-      font-weight: 650;
-    }
-
-    .noiDungCard {
-      flex: 1;
-      min-height: 30px;
-
-      margin-bottom: 15px;
-
-      color: var(--mauChu);
-      font-size: 14px;
-      line-height: 1.6;
-
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-
-      max-height: 100px;
-      overflow-y: auto;
-    }
-
-    .chanThe {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 8px;
-
-      padding-top: 12px;
-      border-top: 1px solid var(--mauVien);
-    }
-
-    .nutThe {
-      min-height: 38px;
-      padding: 0 13px;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-
-      border-radius: 11px;
-
-      font-size: 13px;
-      font-weight: 700;
-
-      transition: background 120ms ease;
-    }
-
-    .nutCopy {
-      background: var(--mauChinhNhe);
-      color: var(--mauChinhDam);
-    }
-
-    .nutCopy:hover {
-      background: #D2DDC9;
-    }
-
-    .nutOpen {
-      background: #EDF0EA;
-      color: #354A30;
-      text-decoration: none;
-    }
-
-    .nutOpen:hover {
-      background: #E0E7DA;
-    }
-
-    .nutXoaNho {
-      background: var(--mauXoaNen);
-      color: var(--mauXoa);
-    }
-
-    .nutXoaNho:hover {
-      background: #F0D9D5;
-    }
-
-    .nutXoaTatCa {
-      width: 100%;
-      min-height: 50px;
-
-      margin-top: 15px;
-      padding: 0 20px;
-
-      border: 1px solid #E8C9C4;
-      border-radius: var(--banKinhNut);
-
-      background: var(--mauXoaNen);
-      color: var(--mauXoa);
-
-      font-size: 14px;
-      font-weight: 750;
-    }
-
-    .nutXoaTatCa:hover {
-      background: #F0D9D5;
-    }
-
-    /* ==================================================
-       8. VIEW COPY
-    ================================================== */
-
-    .theCopy {
-      padding: 16px;
-
-      background: var(--mauThe);
-      border: 1px solid var(--mauVien);
-      border-radius: var(--banKinhThe);
-
-      box-shadow: var(--bongThe);
-    }
-
-    .trangThaiClipboard {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-
-      margin-bottom: 14px;
-      padding: 12px 14px;
-
-      border-radius: 13px;
-
-      background: var(--mauChinhRatNhe);
-      color: var(--mauChinhDam);
-
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .dauTrangThai {
-      flex-shrink: 0;
-
-      width: 8px;
-      height: 8px;
-
-      margin-top: 5px;
-
-      border-radius: 50%;
-      background: var(--mauChinh);
-    }
-
-    #oNoiDung {
-      display: block;
-
-      width: 100%;
-      min-height: 48vh;
-      max-height: 65vh;
-
-      resize: vertical;
-
-      padding: 16px;
-
-      border: 1px solid var(--mauVien);
-      border-radius: 15px;
-
-      outline: none;
-
-      background: #FCFDF9;
-      color: var(--mauChu);
-
-      font-size: 16px;
-      line-height: 1.65;
-
-      overflow-wrap: anywhere;
-    }
-
-    #oNoiDung:focus {
-      border: 2px solid var(--mauChinh);
-      padding: 15px;
-    }
-
-    .hangNut {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-
-      margin-top: 13px;
-    }
-
-    .nutChinh,
-    .nutPhu {
-      min-height: 50px;
-      padding: 0 18px;
-
-      border: 0;
-      border-radius: var(--banKinhNut);
-
-      font-size: 14px;
-      font-weight: 750;
-    }
-
-    .nutChinh {
-      background: var(--mauChinh);
-      color: #FFFFFF;
-    }
-
-    .nutChinh:hover {
-      background: var(--mauChinhDam);
-    }
-
-    .nutPhu {
-      background: var(--mauChinhNhe);
-      color: var(--mauChinhDam);
-    }
-
-    .nutPhu:hover {
-      background: #D2DDC9;
-    }
-
-    .nutDanClipboard {
-      width: 100%;
-      margin-top: 11px;
-    }
-
-    /* ==================================================
-       9. TRANG TRONG
-    ================================================== */
-
-    .trangTrong {
-      padding: 35px 18px;
+    .ghiChuQR {
+      margin:
+        15px
+        0
+        0;
 
       text-align: center;
 
-      background: var(--mauThe);
-      border: 1px dashed var(--mauVien);
-      border-radius: 18px;
+      color:
+        var(--mauChuPhu);
+
+      font-size: 13px;
+
+      line-height: 1.5;
     }
 
-    .trangTrongIcon {
+
+    /* =========================================================
+       TRANG THAI
+       ========================================================= */
+
+    .trangThaiQR {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      margin-bottom: 15px;
+
+      color:
+        var(--mauChuPhu);
+
+      font-size: 12px;
+    }
+
+    .chamTrangThai {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background:
+        var(--mauChinh);
+    }
+
+
+    /* =========================================================
+       DANH SACH
+       ========================================================= */
+
+    .tieuDeDanhSach {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 10px;
+
       margin-bottom: 12px;
-      color: var(--mauChinh);
-      font-size: 34px;
     }
 
-    .trangTrongTieuDe {
-      font-size: 15px;
+    .tieuDeDanhSachTrai {
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+    }
+
+    .tieuDeDanhSach h3 {
+      margin: 0;
+
+      font-size: 17px;
+    }
+
+    .soLuong {
+      min-width: 25px;
+      height: 25px;
+
+      padding:
+        0
+        7px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 999px;
+
+      background:
+        var(--mauChinhNhe);
+
+      color:
+        var(--mauChinhDam);
+
+      font-size: 12px;
       font-weight: 700;
     }
 
-    .trangTrongMoTa {
-      margin-top: 6px;
-      color: var(--mauChuPhu);
+
+    #danhSachNoiDung {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 12px;
+
+      max-height: 60vh;
+
+      overflow-y: auto;
+
+      padding-right: 2px;
+    }
+
+
+    /* =========================================================
+       THE NOI DUNG
+       ========================================================= */
+
+    .theNoiDung {
+      flex: 0 0 auto;
+
+      background:
+        #FFFFFF;
+
+      border:
+        1px solid
+        var(--mauVien);
+
+      border-radius:
+        var(--banKinhVua);
+
+      padding: 15px;
+
+      box-shadow:
+        0 2px 8px
+        rgba(45, 60, 40, 0.04);
+    }
+
+    .thoiGianNoiDung {
+      margin-bottom: 9px;
+
+      color:
+        var(--mauChinh);
+
+      font-size: 12px;
+
+      font-weight: 700;
+    }
+
+    .noiDungText {
+      min-height: 22px;
+
+      margin-bottom: 13px;
+
+      color:
+        var(--mauChu);
+
+      font-size: 14px;
+
+      line-height: 1.55;
+
+      white-space: pre-wrap;
+
+      overflow-wrap: anywhere;
+
+      word-break: break-word;
+    }
+
+    .nhomNutNoiDung {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+    }
+
+    .nutNoiDung {
+      min-height: 36px;
+
+      padding:
+        7px
+        12px;
+
+      border-radius:
+        10px;
+
+      font-size: 12px;
+    }
+
+
+    /* =========================================================
+       KHONG CO DU LIEU
+       ========================================================= */
+
+    .khongCoDuLieu {
+      padding:
+        30px
+        15px;
+
+      text-align: center;
+
+      color:
+        var(--mauChuPhu);
+
       font-size: 13px;
+
+      border:
+        1px dashed
+        var(--mauVien);
+
+      border-radius:
+        var(--banKinhVua);
+
+      background:
+        var(--mauChinhRatNhe);
+    }
+
+
+    /* =========================================================
+       TEXTAREA
+       ========================================================= */
+
+    .nhanTextarea {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color:
+        var(--mauChinhDam);
+
+      font-size: 14px;
+
+      font-weight: 700;
+    }
+
+    #oNoiDung {
+      width: 100%;
+
+      min-height: 300px;
+
+      resize: vertical;
+
+      padding: 15px;
+
+      border:
+        1px solid
+        var(--mauVien);
+
+      border-radius:
+        var(--banKinhVua);
+
+      outline: none;
+
+      background:
+        #FFFFFF;
+
+      color:
+        var(--mauChu);
+
+      font-size: 15px;
+
+      line-height: 1.6;
+
+      transition:
+        border var(--thoiGian),
+        box-shadow var(--thoiGian);
+    }
+
+    #oNoiDung:focus {
+      border-color:
+        var(--mauChinh);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(82, 103, 71, 0.10);
+    }
+
+    .trangThaiClipboard {
+      margin-top: 9px;
+
+      color:
+        var(--mauChuPhu);
+
+      font-size: 12px;
+
       line-height: 1.5;
     }
 
-    /* ==================================================
-       10. TOAST
-    ================================================== */
+    .nhomNutNhap {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-top: 15px;
+    }
+
+
+    /* =========================================================
+       DIALOG
+       ========================================================= */
+
+    .lopDialog {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 1000;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        rgba(30, 38, 29, 0.42);
+
+      backdrop-filter:
+        blur(3px);
+    }
+
+    .lopDialog.dangHien {
+      display: flex;
+    }
+
+    .hopThoai {
+      width:
+        min(100%, 420px);
+
+      padding: 22px;
+
+      background:
+        #FFFFFF;
+
+      border-radius:
+        22px;
+
+      box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.18);
+    }
+
+    .hopThoai h3 {
+      margin:
+        0
+        0
+        8px;
+
+      color:
+        var(--mauChinhDam);
+
+      font-size: 19px;
+    }
+
+    .hopThoai p {
+      margin: 0;
+
+      color:
+        var(--mauChuPhu);
+
+      font-size: 14px;
+
+      line-height: 1.55;
+    }
+
+    .hopThoaiNut {
+      display: flex;
+
+      justify-content: flex-end;
+
+      gap: 8px;
+
+      margin-top: 20px;
+    }
+
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
 
     #toast {
       position: fixed;
-      z-index: 300;
 
       left: 50%;
-      bottom: calc(24px + env(safe-area-inset-bottom));
+      bottom: 22px;
 
-      transform: translate(-50%, 15px);
+      z-index: 2000;
 
-      width: max-content;
-      max-width: calc(100vw - 32px);
+      max-width:
+        min(90vw, 450px);
 
-      padding: 12px 18px;
+      padding:
+        11px
+        16px;
 
-      border: 1px solid #5B6653;
-      border-radius: 14px;
+      border-radius:
+        999px;
 
-      background: #34452F;
-      color: #FFFFFF;
+      background:
+        #2F382D;
 
-      font-size: 14px;
-      line-height: 1.5;
+      color:
+        #FFFFFF;
 
-      opacity: 0;
+      font-size: 13px;
+
+      box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.18);
+
       pointer-events: none;
 
+      opacity: 0;
+
+      transform:
+        translate(-50%, 20px);
+
       transition:
-        opacity 180ms ease,
-        transform 180ms ease;
+        opacity 0.2s ease,
+        transform 0.2s ease;
     }
 
     #toast.dangHien {
       opacity: 1;
-      transform: translate(-50%, 0);
+
+      transform:
+        translate(-50%, 0);
     }
 
-    /* ==================================================
-       11. LOADING
-    ================================================== */
 
-    #lopLoading {
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    #loading {
       position: fixed;
-      z-index: 400;
+
       inset: 0;
 
+      z-index: 3000;
+
       display: none;
+
       align-items: center;
       justify-content: center;
 
-      padding: 20px;
+      background:
+        rgba(247, 248, 244, 0.72);
 
-      background: rgba(247, 248, 244, 0.72);
-      backdrop-filter: blur(3px);
+      backdrop-filter:
+        blur(3px);
     }
 
-    #lopLoading.dangHien {
+    #loading.dangHien {
       display: flex;
     }
 
     .hopLoading {
-      min-width: 180px;
-      padding: 22px;
+      display: flex;
 
-      border: 1px solid var(--mauVien);
-      border-radius: 20px;
+      flex-direction: column;
 
-      background: #FFFFFF;
-      box-shadow: var(--bongThe);
+      align-items: center;
 
-      text-align: center;
-      font-size: 14px;
+      gap: 12px;
+
+      padding:
+        22px
+        26px;
+
+      background:
+        #FFFFFF;
+
+      border-radius:
+        20px;
+
+      border:
+        1px solid
+        var(--mauVien);
+
+      box-shadow:
+        var(--bongTheLon);
     }
 
     .vongLoading {
-      width: 32px;
-      height: 32px;
-
-      margin: 0 auto 12px;
-
-      border: 3px solid var(--mauChinhNhe);
-      border-top-color: var(--mauChinh);
+      width: 30px;
+      height: 30px;
 
       border-radius: 50%;
 
-      animation: xoayLoading 700ms linear infinite;
+      border:
+        3px solid
+        var(--mauChinhNhe);
+
+      border-top-color:
+        var(--mauChinh);
+
+      animation:
+        xoayLoading
+        0.8s
+        linear
+        infinite;
     }
 
     @keyframes xoayLoading {
+
       to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* ==================================================
-       12. DIALOG
-    ================================================== */
-
-    #lopDialog {
-      position: fixed;
-      z-index: 350;
-      inset: 0;
-
-      display: none;
-      align-items: center;
-      justify-content: center;
-
-      padding: 20px;
-
-      background: rgba(28, 35, 25, 0.4);
-    }
-
-    #lopDialog.dangHien {
-      display: flex;
-    }
-
-    .hopDialog {
-      width: 100%;
-      max-width: 390px;
-
-      padding: 24px;
-
-      border: 1px solid var(--mauVien);
-      border-radius: 24px;
-
-      background: #FFFFFF;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.14);
-    }
-
-    .hopDialog h3 {
-      margin: 0 0 10px;
-      font-size: 21px;
-    }
-
-    .hopDialog p {
-      margin: 0;
-      color: var(--mauChuPhu);
-      font-size: 14px;
-      line-height: 1.65;
-      overflow-wrap: anywhere;
-    }
-
-    .nutDialog {
-      display: flex;
-      justify-content: flex-end;
-      gap: 9px;
-
-      margin-top: 24px;
-    }
-
-    /* ==================================================
-       13. RESPONSIVE
-    ================================================== */
-
-    @media (min-width: 640px) {
-      #khungUngDung {
-        padding: 32px 24px 40px;
+        transform:
+          rotate(360deg);
       }
 
-      .luoiLuaChon {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      #danhSachNoiDung {
-        max-height: 58vh;
-      }
     }
 
-    @media (max-width: 380px) {
-      #khungUngDung {
-        padding-right: 12px;
-        padding-left: 12px;
-      }
+    .chuLoading {
+      color:
+        var(--mauChuPhu);
 
-      .nutThe {
-        padding: 0 10px;
-        font-size: 12px;
-      }
-
-      .theNoiDung {
-        padding: 13px;
-      }
+      font-size: 13px;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 600px) {
+
+      .khungUngDung {
+        padding:
+          15px
+          12px
+          30px;
       }
+
+      .tieuDeUngDung {
+        font-size: 23px;
+      }
+
+      .nhomNutBatDau {
+        grid-template-columns: 1fr;
+      }
+
+      .nutBatDau {
+        min-height: 125px;
+      }
+
+      .the {
+        padding: 15px;
+
+        border-radius:
+          20px;
+      }
+
+      .tieuDeView h2 {
+        font-size: 20px;
+      }
+
+      .nhomNutNhap {
+        flex-direction: column;
+      }
+
+      .nhomNutNhap .nut {
+        width: 100%;
+      }
+
+      #oNoiDung {
+        min-height: 260px;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
-<div id="ungDung">
-  <main id="khungUngDung">
+  <div id="ungDung">
 
-    <!-- ===============================================
-         VIEW 1: BAT DAU
-    ================================================ -->
-
-    <section id="viewBatDau" class="view dangHien">
-
-      <div class="manHinhBatDau">
-
-        <div class="logo" aria-hidden="true">▤</div>
-
-        <h1 class="tieuDeBatDau">QR Clipboard</h1>
-
-        <p class="moTaBatDau">
-          Chuyển nội dung nhanh chóng giữa các thiết bị.
-        </p>
-
-        <div class="luoiLuaChon">
-
-          <button
-            class="nutLuaChon"
-            onclick="moView('maQR')"
-          >
-            <div class="bieuTuongLuaChon" aria-hidden="true">▦</div>
-
-            <div class="tieuDeLuaChon">Mã QR & Kết quả</div>
-
-            <div class="moTaLuaChon">
-              Quét QR và xem nội dung đã lưu.
-            </div>
-          </button>
-
-          <button
-            class="nutLuaChon"
-            onclick="moView('saoChep')"
-          >
-            <div class="bieuTuongLuaChon" aria-hidden="true">▤</div>
-
-            <div class="tieuDeLuaChon">Copy nội dung</div>
-
-            <div class="moTaLuaChon">
-              Nhận nội dung từ Clipboard và lưu lại.
-            </div>
-          </button>
-
-        </div>
-      </div>
-    </section>
+    <div class="khungUngDung">
 
 
-    <!-- ===============================================
-         VIEW 2: QR VA KET QUA
-    ================================================ -->
+      <!-- =====================================================
+           VIEW 1
+           ===================================================== -->
 
-    <section id="viewMaQR" class="view">
+      <section
+        id="viewBatDau"
+        class="view dangHien">
 
-      <div class="dauTrang">
+        <div class="khungBatDau">
 
-        <button
-          class="nutQuayLai"
-          onclick="moView('batDau')"
-          aria-label="Quay lại"
-        >←</button>
+          <h1 class="tieuDeUngDung">
+            QR Clipboard
+          </h1>
 
-        <div>
-          <h1 class="tieuDe">Mã QR & Kết quả</h1>
-          <p class="moTa">Quét mã bằng Zalo hoặc camera.</p>
-        </div>
-
-      </div>
-
-
-      <div class="khuVucQR">
-
-        <!-- THAY BANG URL ANH QR CO SAN CUA BAN -->
-
-        <img
-          id="anhQR"
-          class="anhQR"
-          src="https://pvcfile.github.io/copy/qrcode.jpeg"
-          alt="Mã QR mở trang Copy nội dung"
-        >
-
-        <div id="loiAnhQR" class="loiAnhQR">
-          Không tải được ảnh QR. Hãy kiểm tra URL ảnh.
-        </div>
-
-        <p class="chuQR">
-          Quét mã để mở trang Copy nội dung trên thiết bị khác.
-        </p>
-
-      </div>
-
-
-      <div class="tieuDeDanhSach">
-        <h2>Nội dung đã lưu</h2>
-
-        <span id="soLuongNoiDung" class="soLuong">
-          0 nội dung
-        </span>
-      </div>
-
-
-      <div id="danhSachNoiDung" aria-live="polite"></div>
-
-
-      <button
-        id="nutXoaTatCa"
-        class="nutXoaTatCa"
-        onclick="moDialogXoaTatCa()"
-      >
-        Xóa toàn bộ nội dung
-      </button>
-
-    </section>
-
-
-    <!-- ===============================================
-         VIEW 3: COPY NOI DUNG
-    ================================================ -->
-
-    <section id="viewSaoChep" class="view">
-
-      <div class="dauTrang">
-
-        <button
-          class="nutQuayLai"
-          onclick="moView('batDau')"
-          aria-label="Quay lại"
-        >←</button>
-
-        <div>
-          <h1 class="tieuDe">Copy nội dung</h1>
-          <p class="moTa">
-            Nội dung Clipboard được đồng bộ vào ô nhập.
+          <p class="moTaUngDung">
+            Lưu, đồng bộ và sao chép nội dung nhanh chóng
+            giữa các thiết bị.
           </p>
+
+
+          <div class="nhomNutBatDau">
+
+            <button
+              type="button"
+              class="nutBatDau"
+              id="nutMoKetQua">
+
+              <div class="bieuTuongBatDau">
+                ▦
+              </div>
+
+              <div class="tenNutBatDau">
+                Mã QR & kết quả
+              </div>
+
+              <div class="moTaNutBatDau">
+                Xem mã QR và nội dung đã lưu
+              </div>
+
+            </button>
+
+
+            <button
+              type="button"
+              class="nutBatDau"
+              id="nutMoSaoChep">
+
+              <div class="bieuTuongBatDau">
+                ⧉
+              </div>
+
+              <div class="tenNutBatDau">
+                Copy nội dung
+              </div>
+
+              <div class="moTaNutBatDau">
+                Nhận nội dung từ Clipboard
+              </div>
+
+            </button>
+
+          </div>
+
         </div>
 
-      </div>
+      </section>
 
 
-      <div class="theCopy">
 
-        <div class="trangThaiClipboard" role="status">
+      <!-- =====================================================
+           VIEW 2
+           ===================================================== -->
 
-          <span class="dauTrangThai"></span>
+      <section
+        id="viewMaQR"
+        class="view">
 
-          <span id="trangThaiClipboard">
-            Đang chuẩn bị kiểm tra Clipboard...
+        <div class="tieuDeView">
+
+          <div class="tieuDeViewTrai">
+
+            <h2>
+              Kết quả
+            </h2>
+
+            <p>
+              Nội dung được lưu trên hệ thống
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="nut nutTrang"
+            id="nutQuayLaiBatDau">
+
+            ←
+
+            <span>
+              Quay lại
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- TRANG THAI -->
+
+        <div class="trangThaiQR">
+
+          <span class="chamTrangThai"></span>
+
+          <span id="trangThaiQR">
+            Đang đồng bộ...
           </span>
 
         </div>
 
 
-        <textarea
-          id="oNoiDung"
-          placeholder="Nội dung Clipboard sẽ xuất hiện ở đây..."
-          spellcheck="false"
-          aria-label="Nội dung cần lưu"
-        ></textarea>
+        <!-- QR -->
+
+        <div
+          id="khungQR"
+          class="khungQR">
+
+          <img
+            id="anhQR"
+            class="anhQR"
+            src="https://pvcfile.github.io/copy/qrcode.jpeg"
+            alt="Mã QR mở trang Copy nội dung">
+
+          <p class="ghiChuQR">
+            Quét mã QR bằng điện thoại để mở màn hình
+            nhập nội dung.
+          </p>
+
+        </div>
 
 
-        <div class="hangNut">
+        <!-- DANH SACH -->
+
+        <div class="the">
+
+          <div class="tieuDeDanhSach">
+
+            <div class="tieuDeDanhSachTrai">
+
+              <h3>
+                Nội dung đã lưu
+              </h3>
+
+              <span
+                id="soLuongNoiDung"
+                class="soLuong">
+
+                0
+
+              </span>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="nut nutXoa"
+              id="nutXoaTatCa">
+
+              Xóa tất cả
+
+            </button>
+
+          </div>
+
+
+          <div id="danhSachNoiDung">
+
+            <div class="khongCoDuLieu">
+              Đang tải dữ liệu...
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           VIEW 3
+           ===================================================== -->
+
+      <section
+        id="viewSaoChep"
+        class="view">
+
+        <div class="tieuDeView">
+
+          <div class="tieuDeViewTrai">
+
+            <h2>
+              Copy nội dung
+            </h2>
+
+            <p>
+              Nội dung Clipboard sẽ được đồng bộ tự động.
+            </p>
+
+          </div>
+
 
           <button
-            id="nutLuu"
-            class="nutChinh"
-            onclick="luuNoiDung()"
-          >
-            Lưu nội dung
-          </button>
+            type="button"
+            class="nut nutTrang"
+            id="nutQuayLaiKetQua">
 
-          <button
-            id="nutXoa"
-            class="nutPhu"
-            onclick="xoaNoiDungNhap()"
-          >
-            Xóa & Kết thúc
+            ←
+
+            <span>
+              Kết quả
+            </span>
+
           </button>
 
         </div>
 
 
+        <div class="the">
+
+          <label
+            for="oNoiDung"
+            class="nhanTextarea">
+
+            Nội dung
+
+          </label>
+
+
+          <textarea
+            id="oNoiDung"
+            placeholder="Nội dung từ Clipboard sẽ xuất hiện ở đây..."></textarea>
+
+
+          <div
+            id="trangThaiClipboard"
+            class="trangThaiClipboard">
+
+            Đang khởi động kiểm tra Clipboard...
+
+          </div>
+
+
+          <div class="nhomNutNhap">
+
+            <button
+              id="nutLuu"
+              type="button"
+              class="nut nutChinh">
+
+              Lưu nội dung
+
+            </button>
+
+
+            <button
+              id="nutDanThuCong"
+              type="button"
+              class="nut nutPhu">
+
+              Dán từ Clipboard
+
+            </button>
+
+
+            <button
+              id="nutXoaNoiDungNhap"
+              type="button"
+              class="nut nutXoa">
+
+              Xóa
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       TOAST
+       ======================================================= -->
+
+  <div id="toast"></div>
+
+
+
+  <!-- =======================================================
+       LOADING
+       ======================================================= -->
+
+  <div id="loading">
+
+    <div class="hopLoading">
+
+      <div class="vongLoading"></div>
+
+      <div
+        id="chuLoading"
+        class="chuLoading">
+
+        Đang xử lý...
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       DIALOG
+       ======================================================= -->
+
+  <div
+    id="lopDialog"
+    class="lopDialog">
+
+    <div class="hopThoai">
+
+      <h3 id="tieuDeDialog">
+        Xác nhận
+      </h3>
+
+      <p id="noiDungDialog">
+        Bạn có chắc chắn muốn thực hiện?
+      </p>
+
+      <div class="hopThoaiNut">
+
         <button
-          id="nutDanClipboard"
-          class="nutPhu nutDanClipboard"
-          onclick="docClipboardThuCong()"
-        >
-          Dán từ Clipboard
+          type="button"
+          class="nut nutTrang"
+          id="nutHuyDialog">
+
+          Hủy
+
+        </button>
+
+        <button
+          id="nutXacNhanDialog"
+          type="button"
+          class="nut nutXoa">
+
+          Xác nhận
+
         </button>
 
       </div>
 
-    </section>
-
-  </main>
-</div>
-
-
-<!-- TOAST -->
-
-<div id="toast" role="status" aria-live="polite"></div>
-
-
-<!-- LOADING -->
-
-<div id="lopLoading" aria-live="polite">
-  <div class="hopLoading">
-    <div class="vongLoading"></div>
-    <div id="chuLoading">Đang xử lý...</div>
-  </div>
-</div>
-
-
-<!-- DIALOG -->
-
-<div id="lopDialog" role="dialog" aria-modal="true"
-     aria-labelledby="tieuDeDialog">
-
-  <div class="hopDialog">
-
-    <h3 id="tieuDeDialog">Xác nhận</h3>
-
-    <p id="noiDungDialog">Bạn có chắc chắn không?</p>
-
-    <div class="nutDialog">
-
-      <button
-        class="nutPhu"
-        onclick="dongDialog()"
-      >
-        Hủy
-      </button>
-
-      <button
-        id="nutXacNhanDialog"
-        class="nutChinh"
-      >
-        Xác nhận
-      </button>
-
     </div>
+
   </div>
-</div>
 
 
-<script>
-  'use strict';
 
-  /* ==================================================
-     1. TRANG THAI UNG DUNG
-  ================================================== */
+  <script>
 
-  const APP = {
-    state: {
-      viewHienTai: 'batDau',
-      danhSachNoiDung: [],
-      dangXuLy: false,
-      dangDocClipboard: false,
-      boDemClipboard: null,
-      daThongBaoLoiClipboard: false,
-      lanKiemTraClipboard: 0,
-      idDangXoa: null
-    }
-  };
+    /* =========================================================
+       APP
+       ========================================================= */
 
+    const APP = {
 
-  const layPhanTu = id => document.getElementById(id);
+      state: {
 
+        viewHienTai: 'batDau',
 
-  /* ==================================================
-     2. TOAST VA LOADING
-  ================================================== */
+        dangXuLy: false,
 
-  let boDemToast = null;
+        boDemClipboard: null,
 
-  function hienToast(thongBao) {
-    const toast = layPhanTu('toast');
+        boDemTrangThaiDaScan: null,
 
-    toast.textContent = thongBao;
-    toast.classList.add('dangHien');
+        daKhoiTaoTrangThaiDaScan: false,
 
-    clearTimeout(boDemToast);
+        dangTaiDanhSach: false
 
-    boDemToast = setTimeout(() => {
-      toast.classList.remove('dangHien');
-    }, 2600);
-  }
+      },
 
+      data: {
 
-  function hienLoading(thongBao = 'Đang xử lý...') {
-    layPhanTu('chuLoading').textContent = thongBao;
-    layPhanTu('lopLoading').classList.add('dangHien');
-  }
+        danhSachNoiDung: []
 
-
-  function anLoading() {
-    layPhanTu('lopLoading').classList.remove('dangHien');
-  }
-
-
-  /* ==================================================
-     3. DIEU HUONG VIEW
-  ================================================== */
-
-  function dungTheoDoiClipboard() {
-    if (APP.state.boDemClipboard !== null) {
-      clearInterval(APP.state.boDemClipboard);
-      APP.state.boDemClipboard = null;
-    }
-
-    APP.state.dangDocClipboard = false;
-  }
-
-
-  function batTheoDoiClipboard() {
-    dungTheoDoiClipboard();
-
-    /*
-      Kiểm tra ngay một lần, sau đó kiểm tra
-      định kỳ 500 ms khi đang ở View Copy.
-    */
-
-    kiemTraClipboard();
-
-    APP.state.boDemClipboard = setInterval(() => {
-      if (
-        APP.state.viewHienTai === 'saoChep' &&
-        !document.hidden
-      ) {
-        kiemTraClipboard();
       }
-    }, 500);
-  }
 
-
-  function moView(tenView) {
-    const danhSachView = {
-      batDau: layPhanTu('viewBatDau'),
-      maQR: layPhanTu('viewMaQR'),
-      saoChep: layPhanTu('viewSaoChep')
     };
 
-    if (!danhSachView[tenView]) return;
 
-    /*
-      Dừng bộ kiểm tra Clipboard khi rời View Copy.
-    */
+    /* =========================================================
+       HELPER
+       ========================================================= */
 
-    if (tenView !== 'saoChep') {
+    function layPhanTu(id) {
+
+      return document.getElementById(id);
+
+    }
+
+
+    /* =========================================================
+       MO VIEW
+       ========================================================= */
+
+    function moView(tenView) {
+
       dungTheoDoiClipboard();
-    }
 
-    Object.values(danhSachView).forEach(view => {
-      view.classList.remove('dangHien');
-    });
-
-    danhSachView[tenView].classList.add('dangHien');
-    APP.state.viewHienTai = tenView;
-
-    window.scrollTo({ top: 0, behavior: 'auto' });
-
-    if (tenView === 'maQR') {
-      taiDanhSachNoiDung();
-    }
-
-    if (tenView === 'saoChep') {
-      batTheoDoiClipboard();
-    }
-  }
+      dungTheoDoiTrangThaiDaScan();
 
 
-  document.addEventListener('visibilitychange', () => {
-    if (
-      document.hidden &&
-      APP.state.viewHienTai === 'saoChep'
-    ) {
-      /*
-        Không đọc Clipboard khi tab bị ẩn.
-        Khi quay lại, bộ định kỳ sẽ tiếp tục.
-      */
-      return;
-    }
+      document
+        .querySelectorAll('.view')
+        .forEach(view => {
 
-    if (
-      !document.hidden &&
-      APP.state.viewHienTai === 'saoChep'
-    ) {
-      kiemTraClipboard();
-    }
-  });
+          view.classList.remove(
+            'dangHien'
+          );
+
+        });
 
 
-  /* ==================================================
-     4. CLIPBOARD API
-  ================================================== */
-
-  function capNhatTrangThaiClipboard(thongBao) {
-    layPhanTu('trangThaiClipboard').textContent = thongBao;
-  }
+      let idView =
+        'viewBatDau';
 
 
-  async function kiemTraClipboard() {
-    if (
-      APP.state.viewHienTai !== 'saoChep' ||
-      document.hidden ||
-      APP.state.dangDocClipboard
-    ) {
-      return;
-    }
+      if (tenView === 'maQR') {
 
-    /*
-      Không ghi đè nội dung trong lúc người dùng
-      đang nhập hoặc chỉnh sửa textarea.
-      Bộ kiểm tra vẫn chạy mỗi 500 ms.
-    */
+        idView =
+          'viewMaQR';
 
-    const oNoiDung = layPhanTu('oNoiDung');
-
-    if (document.activeElement === oNoiDung) {
-      return;
-    }
-
-    if (
-      !navigator.clipboard ||
-      typeof navigator.clipboard.readText !== 'function'
-    ) {
-      capNhatTrangThaiClipboard(
-        'Trình duyệt chưa hỗ trợ đọc Clipboard tự động. Hãy dùng nút Dán từ Clipboard.'
-      );
-
-      return;
-    }
-
-    APP.state.dangDocClipboard = true;
-
-    try {
-      /*
-        readText() có thể khiến trình duyệt yêu cầu
-        quyền hoặc từ chối nếu thiếu thao tác người dùng.
-      */
-
-      const noiDungClipboard =
-        await navigator.clipboard.readText();
-
-      const noiDungTextarea = oNoiDung.value;
-
-      /*
-        Chỉ cập nhật khi Clipboard khác textarea.
-        Nếu giống nhau thì không thao tác.
-      */
-
-      if (noiDungClipboard !== noiDungTextarea) {
-        oNoiDung.value = noiDungClipboard;
       }
 
-      APP.state.daThongBaoLoiClipboard = false;
 
-      capNhatTrangThaiClipboard(
-        'Đang kiểm tra Clipboard mỗi 500 ms. Khi bạn đang nhập, việc đồng bộ tạm dừng để tránh ghi đè.'
-      );
-    }
-    catch (loi) {
-      /*
-        Không hiển thị Toast lặp lại mỗi 500 ms.
-      */
+      if (tenView === 'saoChep') {
 
-      capNhatTrangThaiClipboard(
-        'Chưa được phép đọc Clipboard tự động. Hãy nhấn Dán từ Clipboard và cấp quyền nếu trình duyệt yêu cầu.'
-      );
+        idView =
+          'viewSaoChep';
 
-      if (!APP.state.daThongBaoLoiClipboard) {
-        APP.state.daThongBaoLoiClipboard = true;
-
-        console.warn(
-          'Không thể đọc Clipboard tự động:',
-          loi
-        );
       }
-    }
-    finally {
-      APP.state.dangDocClipboard = false;
-    }
-  }
 
 
-  async function docClipboardThuCong() {
-    const nut = layPhanTu('nutDanClipboard');
+      const view =
+        layPhanTu(idView);
 
-    if (
-      !navigator.clipboard ||
-      typeof navigator.clipboard.readText !== 'function'
-    ) {
-      hienToast('Trình duyệt không hỗ trợ Clipboard API.');
-      return;
-    }
 
-    nut.disabled = true;
+      if (!view) {
+        return;
+      }
 
-    try {
-      const noiDung = await navigator.clipboard.readText();
 
-      layPhanTu('oNoiDung').value = noiDung;
-
-      capNhatTrangThaiClipboard(
-        'Đã đọc Clipboard. Nội dung sẽ được kiểm tra định kỳ khi bạn không chỉnh sửa textarea.'
+      view.classList.add(
+        'dangHien'
       );
 
-      hienToast(
-        noiDung ? 'Đã dán nội dung từ Clipboard.' : 'Clipboard đang trống.'
-      );
-    }
-    catch (loi) {
-      console.warn(loi);
 
-      hienToast(
-        'Không đọc được Clipboard. Hãy kiểm tra quyền trình duyệt.'
-      );
-    }
-    finally {
-      nut.disabled = false;
-    }
-  }
+      APP.state.viewHienTai =
+        tenView;
 
 
-  async function xoaClipboard() {
-    if (
-      !navigator.clipboard ||
-      typeof navigator.clipboard.writeText !== 'function'
-    ) {
-      return false;
+      if (tenView === 'maQR') {
+
+        taiDanhSachNoiDung();
+
+        batTheoDoiTrangThaiDaScan();
+
+      }
+
+
+      if (tenView === 'saoChep') {
+
+        batTheoDoiClipboard();
+
+      }
+
     }
 
-    try {
-      await navigator.clipboard.writeText('');
-      return true;
-    }
-    catch (loi) {
-      console.warn('Không thể xóa Clipboard:', loi);
-      return false;
-    }
-  }
 
+    /* =========================================================
+       TRANG THAI DA SCAN - LOAD LAN DAU
+       ========================================================= */
 
-  /* ==================================================
-     5. DINH DANG THOI GIAN
-  ================================================== */
-
-  function dinhDangHaiSo(so) {
-    return String(so).padStart(2, '0');
-  }
-
-
-  function dinhDangThoiGian(duLieu) {
-    return [
-      dinhDangHaiSo(duLieu.ngay),
-      dinhDangHaiSo(duLieu.thang),
-      duLieu.nam
-    ].join('/') + ' · ' + [
-      dinhDangHaiSo(duLieu.gio),
-      dinhDangHaiSo(duLieu.phut),
-      dinhDangHaiSo(duLieu.giay)
-    ].join(':');
-  }
-
-
-  /* ==================================================
-     6. NHAN DIEN URL
-  ================================================== */
-
-  function layURLHopLe(noiDung) {
-    const giaTri = String(noiDung || '').trim();
-
-    /*
-      Chỉ nhận URL HTTP/HTTPS.
-      Không tự mở javascript:, data:, file: ...
-    */
-
-    if (!/^https?:\/\/\S+$/i.test(giaTri)) {
-      return null;
-    }
-
-    try {
-      const url = new URL(giaTri);
+    function khoiTaoTrangThaiDaScan() {
 
       if (
-        url.protocol !== 'https:' &&
-        url.protocol !== 'http:'
+        APP.state.daKhoiTaoTrangThaiDaScan
       ) {
+
+        return;
+
+      }
+
+
+      APP.state.daKhoiTaoTrangThaiDaScan =
+        true;
+
+
+      google.script.run
+
+        .withSuccessHandler(ketQua => {
+
+          if (
+            !ketQua ||
+            !ketQua.thanhCong
+          ) {
+
+            console.warn(
+              'Không thể khởi tạo daScanQr.'
+            );
+
+            return;
+
+          }
+
+
+          capNhatHienThiQR(
+            Number(
+              ketQua.daScanQr
+            )
+          );
+
+        })
+
+        .withFailureHandler(loi => {
+
+          console.error(
+            'Lỗi khởi tạo daScanQr:',
+            loi
+          );
+
+        })
+
+        .xuLyDaScanQrKhiLoad();
+
+    }
+
+
+    /* =========================================================
+       HIEN / AN QR
+       ========================================================= */
+
+    function capNhatHienThiQR(daScanQr) {
+
+      const khungQR =
+        layPhanTu('khungQR');
+
+      const trangThaiQR =
+        layPhanTu('trangThaiQR');
+
+
+      if (!khungQR) {
+        return;
+      }
+
+
+      if (
+        Number(daScanQr) === 1
+      ) {
+
+        khungQR.classList.add(
+          'an'
+        );
+
+
+        if (trangThaiQR) {
+
+          trangThaiQR.textContent =
+            'Đã quét QR - mã QR đang ẩn';
+
+        }
+
+      } else {
+
+        khungQR.classList.remove(
+          'an'
+        );
+
+
+        if (trangThaiQR) {
+
+          trangThaiQR.textContent =
+            'Đang hiển thị mã QR';
+
+        }
+
+      }
+
+    }
+
+
+    /* =========================================================
+       POLLING DA SCAN 3 GIAY
+       ========================================================= */
+
+    function batTheoDoiTrangThaiDaScan() {
+
+      dungTheoDoiTrangThaiDaScan();
+
+
+      kiemTraTrangThaiDaScan();
+
+
+      APP.state.boDemTrangThaiDaScan =
+        setInterval(() => {
+
+          if (
+            APP.state.viewHienTai !== 'maQR'
+          ) {
+
+            return;
+
+          }
+
+
+          if (document.hidden) {
+            return;
+          }
+
+
+          kiemTraTrangThaiDaScan();
+
+        }, 3000);
+
+    }
+
+
+    function dungTheoDoiTrangThaiDaScan() {
+
+      if (
+        APP.state.boDemTrangThaiDaScan
+      ) {
+
+        clearInterval(
+          APP.state.boDemTrangThaiDaScan
+        );
+
+
+        APP.state.boDemTrangThaiDaScan =
+          null;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       KIEM TRA DA SCAN
+       ========================================================= */
+
+    function kiemTraTrangThaiDaScan() {
+
+      google.script.run
+
+        .withSuccessHandler(ketQua => {
+
+          if (!ketQua) {
+            return;
+          }
+
+
+          let daScanQr;
+
+
+          if (
+            typeof ketQua === 'object' &&
+            ketQua.daScanQr !== undefined
+          ) {
+
+            daScanQr =
+              Number(
+                ketQua.daScanQr
+              );
+
+          } else {
+
+            daScanQr =
+              Number(ketQua);
+
+          }
+
+
+          if (
+            daScanQr !== 0 &&
+            daScanQr !== 1
+          ) {
+
+            return;
+
+          }
+
+
+          capNhatHienThiQR(
+            daScanQr
+          );
+
+
+          /*
+           * Cứ 3 giây lấy dữ liệu mới.
+           */
+
+          taiDanhSachNoiDung(true);
+
+        })
+
+        .withFailureHandler(loi => {
+
+          console.warn(
+            'Không thể kiểm tra daScanQr:',
+            loi
+          );
+
+        })
+
+        .layTrangThaiDaScanQr();
+
+    }
+
+
+    /* =========================================================
+       TAI DANH SACH
+       ========================================================= */
+
+    function taiDanhSachNoiDung(
+      amTham = false
+    ) {
+
+      if (
+        APP.state.dangTaiDanhSach
+      ) {
+
+        return;
+
+      }
+
+
+      APP.state.dangTaiDanhSach =
+        true;
+
+
+      if (!amTham) {
+
+        hienLoading(
+          'Đang tải nội dung...'
+        );
+
+      }
+
+
+      google.script.run
+
+        .withSuccessHandler(danhSach => {
+
+          APP.state.dangTaiDanhSach =
+            false;
+
+
+          if (!amTham) {
+
+            anLoading();
+
+          }
+
+
+          APP.data.danhSachNoiDung =
+            Array.isArray(danhSach)
+              ? danhSach
+              : [];
+
+
+          hienThiDanhSach();
+
+        })
+
+        .withFailureHandler(loi => {
+
+          APP.state.dangTaiDanhSach =
+            false;
+
+
+          if (!amTham) {
+
+            anLoading();
+
+          }
+
+
+          console.error(loi);
+
+
+          if (!amTham) {
+
+            hienToast(
+              'Không thể tải danh sách nội dung.'
+            );
+
+          }
+
+        })
+
+        .layDanhSachNoiDung();
+
+    }
+
+
+    /* =========================================================
+       HIEN THI DANH SACH
+       ========================================================= */
+
+    function hienThiDanhSach() {
+
+      const khung =
+        layPhanTu(
+          'danhSachNoiDung'
+        );
+
+      const soLuong =
+        layPhanTu(
+          'soLuongNoiDung'
+        );
+
+
+      if (!khung) {
+        return;
+      }
+
+
+      const danhSach =
+        APP.data.danhSachNoiDung || [];
+
+
+      if (soLuong) {
+
+        soLuong.textContent =
+          danhSach.length;
+
+      }
+
+
+      if (!danhSach.length) {
+
+        khung.innerHTML = `
+
+          <div class="khongCoDuLieu">
+            Chưa có nội dung nào được lưu.
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      /*
+       * Xóa danh sách cũ.
+       */
+
+      khung.innerHTML = '';
+
+
+      /*
+       * Dùng DOM thay vì innerHTML để tạo nút.
+       *
+       * Đây là phần quan trọng giúp Copy/Mở link
+       * hoạt động ổn định với mọi loại nội dung.
+       */
+
+      danhSach.forEach(duLieu => {
+
+        const the =
+          taoTheNoiDung(
+            duLieu
+          );
+
+
+        khung.appendChild(
+          the
+        );
+
+      });
+
+    }
+
+
+    /* =========================================================
+       TAO THE NOI DUNG
+       ========================================================= */
+
+    function taoTheNoiDung(
+      duLieu
+    ) {
+
+      const the =
+        document.createElement(
+          'div'
+        );
+
+
+      the.className =
+        'theNoiDung';
+
+
+      /* -------------------------------------------------------
+         THOI GIAN
+         ------------------------------------------------------- */
+
+      const thoiGian =
+        document.createElement(
+          'div'
+        );
+
+
+      thoiGian.className =
+        'thoiGianNoiDung';
+
+
+      thoiGian.textContent =
+        dinhDangThoiGian(
+          duLieu
+        );
+
+
+      /* -------------------------------------------------------
+         NOI DUNG
+         ------------------------------------------------------- */
+
+      const noiDung =
+        document.createElement(
+          'div'
+        );
+
+
+      noiDung.className =
+        'noiDungText';
+
+
+      noiDung.textContent =
+        duLieu.noiDung ?? '';
+
+
+      /* -------------------------------------------------------
+         NHOM NUT
+         ------------------------------------------------------- */
+
+      const nhomNut =
+        document.createElement(
+          'div'
+        );
+
+
+      nhomNut.className =
+        'nhomNutNoiDung';
+
+
+      /* -------------------------------------------------------
+         NUT COPY
+         ------------------------------------------------------- */
+
+      const nutCopy =
+        document.createElement(
+          'button'
+        );
+
+
+      nutCopy.type =
+        'button';
+
+
+      nutCopy.className =
+        'nut nutPhu nutNoiDung';
+
+
+      nutCopy.textContent =
+        'Copy';
+
+
+      /*
+       * Gắn trực tiếp dữ liệu vào event handler.
+       *
+       * Không dùng onclick="..."
+       */
+
+      nutCopy.addEventListener(
+        'click',
+        () => {
+
+          saoChepNoiDung(
+            duLieu.noiDung ?? ''
+          );
+
+        }
+      );
+
+
+      /* -------------------------------------------------------
+         NUT MO LINK
+         ------------------------------------------------------- */
+
+      const url =
+        layURLHopLe(
+          duLieu.noiDung ?? ''
+        );
+
+
+      if (url) {
+
+        const nutMoLink =
+          document.createElement(
+            'button'
+          );
+
+
+        nutMoLink.type =
+          'button';
+
+
+        nutMoLink.className =
+          'nut nutTrang nutNoiDung';
+
+
+        nutMoLink.textContent =
+          'Mở link';
+
+
+        nutMoLink.addEventListener(
+          'click',
+          () => {
+
+            moLienKet(url);
+
+          }
+        );
+
+
+        nhomNut.appendChild(
+          nutMoLink
+        );
+
+      }
+
+
+      /* -------------------------------------------------------
+         NUT XOA
+         ------------------------------------------------------- */
+
+      const nutXoa =
+        document.createElement(
+          'button'
+        );
+
+
+      nutXoa.type =
+        'button';
+
+
+      nutXoa.className =
+        'nut nutXoa nutNoiDung';
+
+
+      nutXoa.textContent =
+        'Xóa';
+
+
+      nutXoa.addEventListener(
+        'click',
+        () => {
+
+          xoaMotNoiDung(
+            duLieu.id
+          );
+
+        }
+      );
+
+
+      /*
+       * Thứ tự:
+       *
+       * Copy
+       * Mở link (nếu có)
+       * Xóa
+       */
+
+      nhomNut.insertBefore(
+        nutCopy,
+        nhomNut.firstChild
+      );
+
+
+      nhomNut.appendChild(
+        nutXoa
+      );
+
+
+      /* -------------------------------------------------------
+         GHEP THE
+         ------------------------------------------------------- */
+
+      the.appendChild(
+        thoiGian
+      );
+
+      the.appendChild(
+        noiDung
+      );
+
+      the.appendChild(
+        nhomNut
+      );
+
+
+      return the;
+
+    }
+
+
+    /* =========================================================
+       DINH DANG THOI GIAN
+       ========================================================= */
+
+    function dinhDangThoiGian(
+      duLieu
+    ) {
+
+      const ngay =
+        duLieu.ngay ?? '';
+
+      const thang =
+        duLieu.thang ?? '';
+
+      const nam =
+        duLieu.nam ?? '';
+
+      const gio =
+        duLieu.gio ?? '';
+
+      const phut =
+        duLieu.phut ?? '';
+
+      const giay =
+        duLieu.giay ?? '';
+
+
+      if (!nam) {
+        return '';
+      }
+
+
+      return (
+
+        String(ngay)
+          .padStart(2, '0') +
+
+        '/' +
+
+        String(thang)
+          .padStart(2, '0') +
+
+        '/' +
+
+        nam +
+
+        ' ' +
+
+        String(gio)
+          .padStart(2, '0') +
+
+        ':' +
+
+        String(phut)
+          .padStart(2, '0') +
+
+        ':' +
+
+        String(giay)
+          .padStart(2, '0')
+
+      );
+
+    }
+
+
+    /* =========================================================
+       KIEM TRA URL
+       ========================================================= */
+
+    function layURLHopLe(
+      noiDung
+    ) {
+
+      if (!noiDung) {
         return null;
       }
 
-      return url.href;
-    }
-    catch (loi) {
-      return null;
-    }
-  }
 
+      const text =
+        String(noiDung)
+          .trim();
 
-  /* ==================================================
-     7. TAI DANH SACH TU GOOGLE SHEET
-  ================================================== */
-
-  function taiDanhSachNoiDung() {
-    hienLoading('Đang tải dữ liệu...');
-
-    google.script.run
-      .withSuccessHandler(danhSach => {
-        anLoading();
-
-        APP.state.danhSachNoiDung =
-          Array.isArray(danhSach) ? danhSach : [];
-
-        veDanhSachNoiDung();
-      })
-      .withFailureHandler(loi => {
-        anLoading();
-
-        console.error(loi);
-
-        hienToast('Không thể tải dữ liệu từ Google Sheet.');
-      })
-      .layDanhSachNoiDung();
-  }
-
-
-  /* ==================================================
-     8. TAO CAC THE NOI DUNG
-  ================================================== */
-
-  function taoNutThe(nhan, bieuTuong, lop, hanhDong) {
-    const nut = document.createElement('button');
-
-    nut.type = 'button';
-    nut.className = `nutThe ${lop}`;
-    nut.textContent = `${bieuTuong} ${nhan}`;
-    nut.addEventListener('click', hanhDong);
-
-    return nut;
-  }
-
-
-  function veDanhSachNoiDung() {
-    const khung = layPhanTu('danhSachNoiDung');
-
-    const danhSach = APP.state.danhSachNoiDung;
-
-    layPhanTu('soLuongNoiDung').textContent =
-      `${danhSach.length} nội dung`;
-
-    khung.replaceChildren();
-
-    if (danhSach.length === 0) {
-      const trangTrong = document.createElement('div');
-      trangTrong.className = 'trangTrong';
-
-      const bieuTuong = document.createElement('div');
-      bieuTuong.className = 'trangTrongIcon';
-      bieuTuong.textContent = '▤';
-
-      const tieuDe = document.createElement('div');
-      tieuDe.className = 'trangTrongTieuDe';
-      tieuDe.textContent = 'Chưa có nội dung nào';
-
-      const moTa = document.createElement('div');
-      moTa.className = 'trangTrongMoTa';
-      moTa.textContent =
-        'Quét mã QR trên thiết bị khác để bắt đầu lưu nội dung.';
-
-      trangTrong.append(bieuTuong, tieuDe, moTa);
-      khung.appendChild(trangTrong);
-
-      return;
-    }
-
-    danhSach.forEach(duLieu => {
-      const the = document.createElement('article');
-      the.className = 'theNoiDung';
-
-      const thoiGian = document.createElement('div');
-      thoiGian.className = 'thoiGian';
-      thoiGian.textContent = dinhDangThoiGian(duLieu);
-
-      const noiDung = document.createElement('div');
-      noiDung.className = 'noiDungCard';
-      noiDung.textContent = duLieu.noiDung;
-
-      const chanThe = document.createElement('div');
-      chanThe.className = 'chanThe';
 
       /*
-        Nút Copy: chép nội dung của thẻ vào Clipboard.
-      */
+       * Cho phép URL có query, hash...
+       */
 
-      const nutCopy = taoNutThe(
-        'Copy',
-        '▣',
-        'nutCopy',
-        () => copyNoiDungThe(duLieu.noiDung)
-      );
-
-      chanThe.appendChild(nutCopy);
-
-      /*
-        Nút Open link chỉ xuất hiện nếu nội dung là URL hợp lệ.
-      */
-
-      const url = layURLHopLe(duLieu.noiDung);
-
-      if (url) {
-        const nutOpen = document.createElement('a');
-
-        nutOpen.className = 'nutThe nutOpen';
-        nutOpen.textContent = '↗ Open link';
-        nutOpen.href = url;
-        nutOpen.target = '_blank';
-        nutOpen.rel = 'noopener noreferrer';
-
-        chanThe.appendChild(nutOpen);
-      }
-
-      /*
-        Nút Xóa.
-      */
-
-      const nutXoa = taoNutThe(
-        'Xóa',
-        '×',
-        'nutXoaNho',
-        () => moDialogXoa(duLieu.id)
-      );
-
-      chanThe.appendChild(nutXoa);
-
-      the.append(thoiGian, noiDung, chanThe);
-      khung.appendChild(the);
-    });
-  }
-
-
-  /* ==================================================
-     9. COPY NOI DUNG CUA THE
-  ================================================== */
-
-  async function copyNoiDungThe(noiDung) {
-    try {
       if (
-        !navigator.clipboard ||
-        typeof navigator.clipboard.writeText !== 'function'
+        !/^https?:\/\/\S+$/i.test(
+          text
+        )
       ) {
-        throw new Error('Clipboard API không khả dụng.');
+
+        return null;
+
       }
 
-      await navigator.clipboard.writeText(String(noiDung));
 
-      hienToast('Đã copy nội dung.');
-    }
-    catch (loi) {
-      console.warn(loi);
+      try {
 
-      hienToast(
-        'Không thể copy tự động. Hãy mở nội dung và copy thủ công.'
-      );
-    }
-  }
+        const url =
+          new URL(text);
 
 
-  /* ==================================================
-     10. LUU NOI DUNG
-  ================================================== */
+        if (
+          url.protocol !== 'http:' &&
+          url.protocol !== 'https:'
+        ) {
 
-  function luuNoiDung() {
-    if (APP.state.dangXuLy) return;
+          return null;
 
-    const noiDung = layPhanTu('oNoiDung').value;
-
-    if (!noiDung.trim()) {
-      hienToast('Nội dung không được để trống.');
-      return;
-    }
-
-    APP.state.dangXuLy = true;
-    layPhanTu('nutLuu').disabled = true;
-
-    hienLoading('Đang lưu nội dung...');
-
-    google.script.run
-      .withSuccessHandler(ketQua => {
-        APP.state.dangXuLy = false;
-        layPhanTu('nutLuu').disabled = false;
-
-        anLoading();
-
-        if (!ketQua || !ketQua.thanhCong) {
-          hienToast('Không thể lưu nội dung.');
-          return;
         }
 
-        /*
-          Giữ nguyên textarea sau khi lưu.
-          Không xóa Clipboard ở bước này.
-          Người dùng có thể tiếp tục kiểm tra nội dung.
-        */
 
-        hienToast('Đã lưu nội dung vào Google Sheet.');
-      })
-      .withFailureHandler(loi => {
-        APP.state.dangXuLy = false;
-        layPhanTu('nutLuu').disabled = false;
+        return url.href;
 
-        anLoading();
+      } catch (loi) {
 
-        console.error(loi);
+        return null;
 
-        hienToast('Lưu thất bại. Vui lòng thử lại.');
-      })
-      .luuNoiDung(noiDung);
-  }
+      }
 
-
-  /* ==================================================
-     11. XOA TEXTAREA + CLIPBOARD
-     SAU DO VE VIEW KET QUA
-  ================================================== */
-
-  async function xoaNoiDungNhap() {
-    if (APP.state.dangXuLy) return;
-
-    /*
-      Xóa textarea trước.
-    */
-
-    layPhanTu('oNoiDung').value = '';
-
-    capNhatTrangThaiClipboard(
-      'Đã xóa nội dung trên màn hình.'
-    );
-
-    /*
-      Thử xóa Clipboard trong thao tác người dùng.
-    */
-
-    const daXoaClipboard = await xoaClipboard();
-
-    if (daXoaClipboard) {
-      hienToast('Đã xóa nội dung và Clipboard.');
     }
-    else {
-      hienToast(
-        'Đã xóa textarea. Trình duyệt chưa cho phép xóa Clipboard.'
+
+
+    /* =========================================================
+       MO LINK
+       ========================================================= */
+
+    function moLienKet(
+      url
+    ) {
+
+      if (!url) {
+        return;
+      }
+
+
+      /*
+       * Dùng anchor thay vì window.open
+       * để giảm khả năng popup blocker chặn.
+       */
+
+      const theA =
+        document.createElement(
+          'a'
+        );
+
+
+      theA.href =
+        url;
+
+      theA.target =
+        '_blank';
+
+      theA.rel =
+        'noopener noreferrer';
+
+
+      document.body.appendChild(
+        theA
       );
+
+
+      theA.click();
+
+
+      theA.remove();
+
     }
 
-    /*
-      Dừng polling trước khi chuyển view để Clipboard
-      không được đọc lại và đưa trở lại textarea.
-    */
 
-    dungTheoDoiClipboard();
+    /* =========================================================
+       COPY NOI DUNG
+       ========================================================= */
 
-    /*
-      Chuyển về View kết quả.
-    */
+    async function saoChepNoiDung(
+      noiDung
+    ) {
 
-    moView('maQR');
-  }
+      /*
+       * Phương án 1:
+       * Clipboard API.
+       */
 
+      try {
 
-  /* ==================================================
-     12. DIALOG XAC NHAN
-  ================================================== */
+        if (
+          navigator.clipboard &&
+          navigator.clipboard.writeText
+        ) {
 
-  function hienDialog(tieuDe, noiDung, hanhDongXacNhan) {
-    layPhanTu('tieuDeDialog').textContent = tieuDe;
-    layPhanTu('noiDungDialog').textContent = noiDung;
-
-    layPhanTu('nutXacNhanDialog').onclick = () => {
-      dongDialog();
-      hanhDongXacNhan();
-    };
-
-    layPhanTu('lopDialog').classList.add('dangHien');
-  }
-
-
-  function dongDialog() {
-    layPhanTu('lopDialog').classList.remove('dangHien');
-  }
-
-
-  function moDialogXoa(id) {
-    hienDialog(
-      'Xóa nội dung?',
-      'Nội dung này sẽ bị xóa khỏi Google Sheet. Bạn không thể hoàn tác.',
-      () => xoaMotNoiDung(id)
-    );
-  }
-
-
-  function moDialogXoaTatCa() {
-    if (APP.state.danhSachNoiDung.length === 0) {
-      hienToast('Không có nội dung để xóa.');
-      return;
-    }
-
-    hienDialog(
-      'Xóa toàn bộ nội dung?',
-      'Tất cả nội dung đã lưu sẽ bị xóa. Thao tác này không thể hoàn tác.',
-      () => xoaTatCaNoiDung()
-    );
-  }
-
-
-  /* ==================================================
-     13. XOA MOT THE
-  ================================================== */
-
-  function xoaMotNoiDung(id) {
-    if (APP.state.dangXuLy) return;
-
-    APP.state.dangXuLy = true;
-    hienLoading('Đang xóa nội dung...');
-
-    google.script.run
-      .withSuccessHandler(ketQua => {
-        APP.state.dangXuLy = false;
-        anLoading();
-
-        if (!ketQua) {
-          hienToast('Không tìm thấy nội dung cần xóa.');
-          return;
-        }
-
-        /*
-          Cập nhật ngay giao diện sau khi xóa thành công.
-        */
-
-        APP.state.danhSachNoiDung =
-          APP.state.danhSachNoiDung.filter(
-            duLieu => String(duLieu.id) !== String(id)
+          await navigator.clipboard.writeText(
+            String(noiDung ?? '')
           );
 
-        veDanhSachNoiDung();
 
-        hienToast('Đã xóa nội dung.');
-      })
-      .withFailureHandler(loi => {
-        APP.state.dangXuLy = false;
-        anLoading();
+          hienToast(
+            'Đã sao chép nội dung.'
+          );
+
+
+          return;
+
+        }
+
+      } catch (loi) {
+
+        console.warn(
+          'Clipboard API thất bại:',
+          loi
+        );
+
+      }
+
+
+      /*
+       * Phương án 2:
+       * fallback bằng textarea.
+       */
+
+      try {
+
+        const oTam =
+          document.createElement(
+            'textarea'
+          );
+
+
+        oTam.value =
+          String(noiDung ?? '');
+
+
+        oTam.style.position =
+          'fixed';
+
+        oTam.style.left =
+          '-9999px';
+
+        oTam.style.top =
+          '0';
+
+
+        document.body.appendChild(
+          oTam
+        );
+
+
+        oTam.focus();
+
+        oTam.select();
+
+        oTam.setSelectionRange(
+          0,
+          oTam.value.length
+        );
+
+
+        const thanhCong =
+          document.execCommand(
+            'copy'
+          );
+
+
+        oTam.remove();
+
+
+        if (thanhCong) {
+
+          hienToast(
+            'Đã sao chép nội dung.'
+          );
+
+        } else {
+
+          hienToast(
+            'Không thể sao chép tự động.'
+          );
+
+        }
+
+      } catch (loi) {
 
         console.error(loi);
 
-        hienToast('Không thể xóa nội dung.');
-      })
-      .xoaNoiDung(id);
-  }
+        hienToast(
+          'Không thể sao chép nội dung.'
+        );
+
+      }
+
+    }
 
 
-  /* ==================================================
-     14. XOA TOAN BO
-  ================================================== */
+    /* =========================================================
+       XOA MOT NOI DUNG
+       ========================================================= */
 
-  function xoaTatCaNoiDung() {
-    if (APP.state.dangXuLy) return;
+    function xoaMotNoiDung(
+      id
+    ) {
 
-    APP.state.dangXuLy = true;
-    hienLoading('Đang xóa toàn bộ...');
+      moDialog(
+        'Xóa nội dung',
+        'Bạn có chắc chắn muốn xóa nội dung này?',
+        () => {
 
-    google.script.run
-      .withSuccessHandler(() => {
-        APP.state.dangXuLy = false;
-        anLoading();
+          hienLoading(
+            'Đang xóa nội dung...'
+          );
 
-        APP.state.danhSachNoiDung = [];
 
-        veDanhSachNoiDung();
+          google.script.run
 
-        hienToast('Đã xóa toàn bộ nội dung.');
-      })
-      .withFailureHandler(loi => {
-        APP.state.dangXuLy = false;
-        anLoading();
+            .withSuccessHandler(
+              ketQua => {
+
+                anLoading();
+
+
+                if (
+                  ketQua &&
+                  ketQua.thanhCong === false
+                ) {
+
+                  hienToast(
+                    'Không thể xóa nội dung.'
+                  );
+
+                  return;
+
+                }
+
+
+                hienToast(
+                  'Đã xóa nội dung.'
+                );
+
+
+                taiDanhSachNoiDung();
+
+              }
+            )
+
+            .withFailureHandler(
+              loi => {
+
+                anLoading();
+
+                console.error(loi);
+
+                hienToast(
+                  'Xóa thất bại.'
+                );
+
+              }
+            )
+
+            .xoaNoiDung(id);
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       XOA TAT CA
+       ========================================================= */
+
+    function xoaTatCaNoiDung() {
+
+      const danhSach =
+        APP.data.danhSachNoiDung || [];
+
+
+      if (!danhSach.length) {
+
+        hienToast(
+          'Không có nội dung để xóa.'
+        );
+
+        return;
+
+      }
+
+
+      moDialog(
+        'Xóa tất cả',
+        'Bạn có chắc chắn muốn xóa toàn bộ nội dung đã lưu?',
+        () => {
+
+          hienLoading(
+            'Đang xóa dữ liệu...'
+          );
+
+
+          google.script.run
+
+            .withSuccessHandler(
+              ketQua => {
+
+                anLoading();
+
+
+                if (
+                  ketQua &&
+                  ketQua.thanhCong === false
+                ) {
+
+                  hienToast(
+                    'Không thể xóa dữ liệu.'
+                  );
+
+                  return;
+
+                }
+
+
+                hienToast(
+                  'Đã xóa toàn bộ nội dung.'
+                );
+
+
+                taiDanhSachNoiDung();
+
+              }
+            )
+
+            .withFailureHandler(
+              loi => {
+
+                anLoading();
+
+                console.error(loi);
+
+                hienToast(
+                  'Xóa thất bại.'
+                );
+
+              }
+            )
+
+            .xoaTatCaNoiDung();
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       CLIPBOARD POLLING 500ms
+       ========================================================= */
+
+    function batTheoDoiClipboard() {
+
+      dungTheoDoiClipboard();
+
+
+      capNhatTrangThaiClipboard(
+        'Đang kiểm tra Clipboard...'
+      );
+
+
+      kiemTraClipboard();
+
+
+      APP.state.boDemClipboard =
+        setInterval(
+          () => {
+
+            if (
+              APP.state.viewHienTai !==
+              'saoChep'
+            ) {
+
+              return;
+
+            }
+
+
+            if (document.hidden) {
+              return;
+            }
+
+
+            kiemTraClipboard();
+
+          },
+          500
+        );
+
+    }
+
+
+    function dungTheoDoiClipboard() {
+
+      if (
+        APP.state.boDemClipboard
+      ) {
+
+        clearInterval(
+          APP.state.boDemClipboard
+        );
+
+
+        APP.state.boDemClipboard =
+          null;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       KIEM TRA CLIPBOARD
+       ========================================================= */
+
+    async function kiemTraClipboard() {
+
+      if (
+        !navigator.clipboard ||
+        !navigator.clipboard.readText
+      ) {
+
+        capNhatTrangThaiClipboard(
+          'Trình duyệt không hỗ trợ đọc Clipboard tự động.'
+        );
+
+        return;
+
+      }
+
+
+      const oNoiDung =
+        layPhanTu(
+          'oNoiDung'
+        );
+
+
+      if (
+        document.activeElement ===
+        oNoiDung
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const clipboard =
+          await navigator.clipboard.readText();
+
+
+        const noiDungHienTai =
+          oNoiDung.value;
+
+
+        /*
+         * Giống nhau:
+         * không làm gì.
+         */
+
+        if (
+          clipboard ===
+          noiDungHienTai
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+         * Khác nhau:
+         * cập nhật textarea.
+         */
+
+        oNoiDung.value =
+          clipboard;
+
+
+        capNhatTrangThaiClipboard(
+          'Đã cập nhật từ Clipboard.'
+        );
+
+      } catch (loi) {
+
+        capNhatTrangThaiClipboard(
+          'Chưa được cấp quyền đọc Clipboard. Có thể dùng "Dán từ Clipboard".'
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       DAN THU CONG
+       ========================================================= */
+
+    async function danThuCong() {
+
+      if (
+        !navigator.clipboard ||
+        !navigator.clipboard.readText
+      ) {
+
+        hienToast(
+          'Trình duyệt không hỗ trợ Clipboard.'
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const noiDung =
+          await navigator.clipboard.readText();
+
+
+        layPhanTu(
+          'oNoiDung'
+        ).value =
+          noiDung;
+
+
+        capNhatTrangThaiClipboard(
+          'Đã dán nội dung từ Clipboard.'
+        );
+
+      } catch (loi) {
 
         console.error(loi);
 
-        hienToast('Không thể xóa toàn bộ nội dung.');
-      })
-      .xoaTatCaNoiDung();
-  }
+        hienToast(
+          'Không thể đọc Clipboard.'
+        );
+
+      }
+
+    }
 
 
-  /* ==================================================
-     15. KIEM TRA ANH QR
-  ================================================== */
+    /* =========================================================
+       XOA NOI DUNG NHAP
+       ========================================================= */
 
-  layPhanTu('anhQR').addEventListener('error', () => {
-    layPhanTu('anhQR').style.display = 'none';
-    layPhanTu('loiAnhQR').style.display = 'block';
-  });
+    function xoaNoiDungNhap() {
+
+      moDialog(
+        'Xóa nội dung',
+        'Nội dung trong ô nhập và Clipboard sẽ được xóa.',
+        async () => {
+
+          layPhanTu(
+            'oNoiDung'
+          ).value =
+            '';
 
 
-  /* ==================================================
-     16. KHOI DONG
-  ================================================== */
+          await xoaClipboard();
 
-  window.addEventListener('pagehide', () => {
-    dungTheoDoiClipboard();
-  });
 
-</script>
+          dungTheoDoiClipboard();
+
+
+          hienToast(
+            'Đã xóa nội dung và Clipboard.'
+          );
+
+
+          moView(
+            'maQR'
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       XOA CLIPBOARD
+       ========================================================= */
+
+    async function xoaClipboard() {
+
+      if (
+        !navigator.clipboard ||
+        !navigator.clipboard.writeText
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          ''
+        );
+
+      } catch (loi) {
+
+        console.warn(
+          'Không thể xóa Clipboard:',
+          loi
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       LUU NOI DUNG
+       ========================================================= */
+
+    function luuNoiDung() {
+
+      if (
+        APP.state.dangXuLy
+      ) {
+
+        return;
+
+      }
+
+
+      const oNoiDung =
+        layPhanTu(
+          'oNoiDung'
+        );
+
+
+      const noiDung =
+        oNoiDung.value;
+
+
+      if (
+        !noiDung.trim()
+      ) {
+
+        hienToast(
+          'Nội dung không được để trống.'
+        );
+
+        return;
+
+      }
+
+
+      APP.state.dangXuLy =
+        true;
+
+
+      layPhanTu(
+        'nutLuu'
+      ).disabled =
+        true;
+
+
+      hienLoading(
+        'Đang lưu nội dung...'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(
+          ketQua => {
+
+            APP.state.dangXuLy =
+              false;
+
+
+            layPhanTu(
+              'nutLuu'
+            ).disabled =
+              false;
+
+
+            /*
+             * Lỗi ở bản trước:
+             * kiểm tra ketQua.thanhCong quá cứng.
+             *
+             * Ở đây chấp nhận:
+             * true
+             * hoặc {thanhCong:true}
+             */
+
+            const thanhCong =
+              ketQua === true ||
+              (
+                ketQua &&
+                ketQua.thanhCong === true
+              );
+
+
+            if (!thanhCong) {
+
+              anLoading();
+
+              hienToast(
+                'Không thể lưu nội dung.'
+              );
+
+              return;
+
+            }
+
+
+            oNoiDung.value =
+              '';
+
+
+            dungTheoDoiClipboard();
+
+
+            /*
+             * Tải danh sách mới.
+             */
+
+            taiDanhSachNoiDungSauKhiLuu();
+
+          }
+        )
+
+        .withFailureHandler(
+          loi => {
+
+            APP.state.dangXuLy =
+              false;
+
+
+            layPhanTu(
+              'nutLuu'
+            ).disabled =
+              false;
+
+
+            anLoading();
+
+
+            console.error(loi);
+
+
+            hienToast(
+              'Lưu thất bại. Vui lòng thử lại.'
+            );
+
+          }
+        )
+
+        .luuNoiDung(
+          noiDung
+        );
+
+    }
+
+
+    /* =========================================================
+       SAU KHI LUU
+       ========================================================= */
+
+    function taiDanhSachNoiDungSauKhiLuu() {
+
+      hienLoading(
+        'Đang cập nhật kết quả...'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(
+          danhSach => {
+
+            APP.data.danhSachNoiDung =
+              Array.isArray(danhSach)
+                ? danhSach
+                : [];
+
+
+            hienThiDanhSach();
+
+
+            anLoading();
+
+
+            /*
+             * Chuyển về kết quả SAU KHI
+             * dữ liệu mới đã được tải.
+             */
+
+            moView(
+              'maQR'
+            );
+
+
+            /*
+             * hienThiDanhSach() lại sau moView
+             * để đảm bảo danh sách mới hiển thị.
+             */
+
+            hienThiDanhSach();
+
+
+            hienToast(
+              'Đã lưu nội dung.'
+            );
+
+          }
+        )
+
+        .withFailureHandler(
+          loi => {
+
+            console.error(loi);
+
+
+            anLoading();
+
+
+            /*
+             * Vẫn quay về kết quả.
+             */
+
+            moView(
+              'maQR'
+            );
+
+
+            hienToast(
+              'Đã lưu nhưng chưa cập nhật được danh sách.'
+            );
+
+          }
+        )
+
+        .layDanhSachNoiDung();
+
+    }
+
+
+    /* =========================================================
+       TRANG THAI CLIPBOARD
+       ========================================================= */
+
+    function capNhatTrangThaiClipboard(
+      noiDung
+    ) {
+
+      const phanTu =
+        layPhanTu(
+          'trangThaiClipboard'
+        );
+
+
+      if (phanTu) {
+
+        phanTu.textContent =
+          noiDung;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    let boDemToast =
+      null;
+
+
+    function hienToast(
+      noiDung
+    ) {
+
+      const toast =
+        layPhanTu(
+          'toast'
+        );
+
+
+      toast.textContent =
+        noiDung;
+
+
+      toast.classList.add(
+        'dangHien'
+      );
+
+
+      if (boDemToast) {
+
+        clearTimeout(
+          boDemToast
+        );
+
+      }
+
+
+      boDemToast =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              'dangHien'
+            );
+
+          },
+          2500
+        );
+
+    }
+
+
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    function hienLoading(
+      noiDung
+    ) {
+
+      const loading =
+        layPhanTu(
+          'loading'
+        );
+
+
+      const chu =
+        layPhanTu(
+          'chuLoading'
+        );
+
+
+      if (chu) {
+
+        chu.textContent =
+          noiDung ||
+          'Đang xử lý...';
+
+      }
+
+
+      loading.classList.add(
+        'dangHien'
+      );
+
+    }
+
+
+    function anLoading() {
+
+      layPhanTu(
+        'loading'
+      ).classList.remove(
+        'dangHien'
+      );
+
+    }
+
+
+    /* =========================================================
+       DIALOG
+       ========================================================= */
+
+    let hamXacNhanDialog =
+      null;
+
+
+    function moDialog(
+      tieuDe,
+      noiDung,
+      hamXacNhan
+    ) {
+
+      layPhanTu(
+        'tieuDeDialog'
+      ).textContent =
+        tieuDe;
+
+
+      layPhanTu(
+        'noiDungDialog'
+      ).textContent =
+        noiDung;
+
+
+      hamXacNhanDialog =
+        hamXacNhan;
+
+
+      layPhanTu(
+        'lopDialog'
+      ).classList.add(
+        'dangHien'
+      );
+
+    }
+
+
+    function dongDialog() {
+
+      layPhanTu(
+        'lopDialog'
+      ).classList.remove(
+        'dangHien'
+      );
+
+
+      hamXacNhanDialog =
+        null;
+
+    }
+
+
+    /* =========================================================
+       EVENT DIALOG
+       ========================================================= */
+
+    layPhanTu(
+      'nutHuyDialog'
+    ).addEventListener(
+      'click',
+      dongDialog
+    );
+
+
+    layPhanTu(
+      'nutXacNhanDialog'
+    ).addEventListener(
+      'click',
+      () => {
+
+        const ham =
+          hamXacNhanDialog;
+
+
+        dongDialog();
+
+
+        if (ham) {
+          ham();
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       EVENT CAC NUT
+       ========================================================= */
+
+    layPhanTu(
+      'nutMoKetQua'
+    ).addEventListener(
+      'click',
+      () => {
+
+        moView(
+          'maQR'
+        );
+
+      }
+    );
+
+
+    layPhanTu(
+      'nutMoSaoChep'
+    ).addEventListener(
+      'click',
+      () => {
+
+        moView(
+          'saoChep'
+        );
+
+      }
+    );
+
+
+    layPhanTu(
+      'nutQuayLaiBatDau'
+    ).addEventListener(
+      'click',
+      () => {
+
+        moView(
+          'batDau'
+        );
+
+      }
+    );
+
+
+    layPhanTu(
+      'nutQuayLaiKetQua'
+    ).addEventListener(
+      'click',
+      () => {
+
+        moView(
+          'maQR'
+        );
+
+      }
+    );
+
+
+    layPhanTu(
+      'nutLuu'
+    ).addEventListener(
+      'click',
+      luuNoiDung
+    );
+
+
+    layPhanTu(
+      'nutDanThuCong'
+    ).addEventListener(
+      'click',
+      danThuCong
+    );
+
+
+    layPhanTu(
+      'nutXoaNoiDungNhap'
+    ).addEventListener(
+      'click',
+      xoaNoiDungNhap
+    );
+
+
+    layPhanTu(
+      'nutXoaTatCa'
+    ).addEventListener(
+      'click',
+      xoaTatCaNoiDung
+    );
+
+
+    /* =========================================================
+       KHI TAB TRO LAI
+       ========================================================= */
+
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+
+        if (
+          document.hidden
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          APP.state.viewHienTai ===
+          'maQR'
+        ) {
+
+          kiemTraTrangThaiDaScan();
+
+        }
+
+
+        if (
+          APP.state.viewHienTai ===
+          'saoChep'
+        ) {
+
+          kiemTraClipboard();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       LOAD
+       ========================================================= */
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+
+        /*
+         * Toggle daScanQr CHỈ MỘT LẦN
+         * trong lần load trang.
+         */
+
+        khoiTaoTrangThaiDaScan();
+
+
+        /*
+         * Cho phép QR mở trực tiếp:
+         *
+         * ?view=saoChep
+         */
+
+        const thamSo =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        if (
+          thamSo.get('view') ===
+          'saoChep'
+        ) {
+
+          moView(
+            'saoChep'
+          );
+
+        }
+
+      }
+    );
+
+  </script>
 
 </body>
+
 </html>
