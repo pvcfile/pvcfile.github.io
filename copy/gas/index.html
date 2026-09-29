@@ -1342,9 +1342,7 @@
               id="nutDanThuCong"
               type="button"
               class="nut nutPhu">
-
               Dán từ Clipboard
-
             </button>
 
 
@@ -1574,58 +1572,38 @@
        ========================================================= */
 
     function khoiTaoTrangThaiDaScan() {
+  if (APP.state.daKhoiTaoTrangThaiDaScan) return;
 
-      if (
-        APP.state.daKhoiTaoTrangThaiDaScan
-      ) {
+  APP.state.daKhoiTaoTrangThaiDaScan = true;
 
+  google.script.run
+    .withSuccessHandler(ketQua => {
+      if (!ketQua || !ketQua.thanhCong) {
+        console.warn('Không thể khởi tạo daScanQr.');
         return;
-
       }
 
+      const daScanQr = Number(ketQua.daScanQr);
 
-      APP.state.daKhoiTaoTrangThaiDaScan =
-        true;
+      // Cập nhật trạng thái hiển thị QR
+      capNhatHienThiQR(daScanQr);
 
-
-      google.script.run
-
-        .withSuccessHandler(ketQua => {
-
-          if (
-            !ketQua ||
-            !ketQua.thanhCong
-          ) {
-
-            console.warn(
-              'Không thể khởi tạo daScanQr.'
-            );
-
-            return;
-
-          }
-
-
-          capNhatHienThiQR(
-            Number(
-              ketQua.daScanQr
-            )
+      // Nếu đã scan → chuyển thẳng sang màn hình nhập nội dung
+      if (daScanQr === 1) {
+        moView('saoChep');
+      }
+      else
+      {
+        moView(
+            'maQR'
           );
-
-        })
-
-        .withFailureHandler(loi => {
-
-          console.error(
-            'Lỗi khởi tạo daScanQr:',
-            loi
-          );
-
-        })
-
-        .xuLyDaScanQrKhiLoad();
-
-    }
+      }
+    })
+    .withFailureHandler(loi => {
+      console.error('Lỗi khởi tạo daScanQr:', loi);
+    })
+    .xuLyDaScanQrKhiLoad();
+}
 
 
     /* =========================================================
@@ -2663,44 +2641,21 @@
        CLIPBOARD POLLING 500ms
        ========================================================= */
 
-    function batTheoDoiClipboard() {
-
+    function batTheoDoiClipboard() 
+    {
       dungTheoDoiClipboard();
-
-
       capNhatTrangThaiClipboard(
         'Đang kiểm tra Clipboard...'
       );
-
-
       kiemTraClipboard();
 
-
       APP.state.boDemClipboard =
-        setInterval(
-          () => {
-
-            if (
-              APP.state.viewHienTai !==
-              'saoChep'
-            ) {
-
-              return;
-
-            }
-
-
-            if (document.hidden) {
-              return;
-            }
-
-
-            kiemTraClipboard();
-
-          },
-          500
-        );
-
+        setInterval(() => 
+        {
+          if (APP.state.viewHienTai !== 'saoChep') return;
+          if (document.hidden) return;
+          kiemTraClipboard();
+        },500);
     }
 
 
@@ -2727,84 +2682,29 @@
        KIEM TRA CLIPBOARD
        ========================================================= */
 
-    async function kiemTraClipboard() {
-
-      if (
-        !navigator.clipboard ||
-        !navigator.clipboard.readText
-      ) {
-
-        capNhatTrangThaiClipboard(
-          'Trình duyệt không hỗ trợ đọc Clipboard tự động.'
-        );
-
+    async function kiemTraClipboard() 
+    {
+      if (!navigator.clipboard || !navigator.clipboard.readText) 
+      {
+        capNhatTrangThaiClipboard('Trình duyệt không hỗ trợ đọc Clipboard tự động.');
         return;
-
       }
 
-
-      const oNoiDung =
-        layPhanTu(
-          'oNoiDung'
-        );
-
-
-      if (
-        document.activeElement ===
-        oNoiDung
-      ) {
-
-        return;
-
-      }
-
-
+      const oNoiDung = layPhanTu('oNoiDung');
+      if (document.activeElement === oNoiDung) return;
       try {
-
-        const clipboard =
-          await navigator.clipboard.readText();
-
-
-        const noiDungHienTai =
-          oNoiDung.value;
-
-
-        /*
-         * Giống nhau:
-         * không làm gì.
-         */
-
-        if (
-          clipboard ===
-          noiDungHienTai
-        ) {
-
+        const clipboard = await navigator.clipboard.readText();
+        const noiDungHienTai = oNoiDung.value;
+        if (clipboard === noiDungHienTai) 
+        {
           return;
-
         }
-
-
-        /*
-         * Khác nhau:
-         * cập nhật textarea.
-         */
-
-        oNoiDung.value =
-          clipboard;
-
-
-        capNhatTrangThaiClipboard(
-          'Đã cập nhật từ Clipboard.'
-        );
-
-      } catch (loi) {
-
-        capNhatTrangThaiClipboard(
-          'Chưa được cấp quyền đọc Clipboard. Có thể dùng "Dán từ Clipboard".'
-        );
-
+        oNoiDung.value = clipboard;
+        capNhatTrangThaiClipboard('Đã cập nhật từ Clipboard.');
+      } catch (loi)
+      {
+        capNhatTrangThaiClipboard('Chưa được cấp quyền đọc Clipboard. Có thể dùng "Dán từ Clipboard".');
       }
-
     }
 
 
@@ -2813,47 +2713,28 @@
        ========================================================= */
 
     async function danThuCong() {
-
       if (
         !navigator.clipboard ||
         !navigator.clipboard.readText
-      ) {
-
-        hienToast(
-          'Trình duyệt không hỗ trợ Clipboard.'
-        );
-
+      ) 
+      {
+        hienToast('Trình duyệt không hỗ trợ Clipboard.');
         return;
-
       }
 
-
       try {
-
-        const noiDung =
-          await navigator.clipboard.readText();
-
-
-        layPhanTu(
-          'oNoiDung'
-        ).value =
-          noiDung;
-
-
+        const noiDung = await navigator.clipboard.readText();
+        layPhanTu('oNoiDung').value = noiDung;
         capNhatTrangThaiClipboard(
           'Đã dán nội dung từ Clipboard.'
         );
 
       } catch (loi) {
-
         console.error(loi);
-
         hienToast(
           'Không thể đọc Clipboard.'
         );
-
       }
-
     }
 
 
@@ -2861,34 +2742,15 @@
        XOA NOI DUNG NHAP
        ========================================================= */
 
-    function xoaNoiDungNhap() {
-
+    function xoaNoiDungNhap() 
+    {
       moDialog(
         'Xóa nội dung',
         'Nội dung trong ô nhập và Clipboard sẽ được xóa.',
         async () => {
-
-          layPhanTu(
-            'oNoiDung'
-          ).value =
-            '';
-
-
+          layPhanTu('oNoiDung').value =   '';
           await xoaClipboard();
-
-
           dungTheoDoiClipboard();
-
-
-          hienToast(
-            'Đã xóa nội dung và Clipboard.'
-          );
-
-
-          moView(
-            'maQR'
-          );
-
         }
       );
 
@@ -2952,6 +2814,7 @@
 
       const noiDung =
         oNoiDung.value;
+       
 
 
       if (
@@ -3027,8 +2890,15 @@
             }
 
 
-            oNoiDung.value =
-              '';
+            // Xóa clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText('').catch(loi => {
+                console.warn('Không thể xóa clipboard:', loi);
+              });
+            }
+
+            // Xóa ô nhập nội dung
+            oNoiDung.value = '';
 
 
             dungTheoDoiClipboard();
