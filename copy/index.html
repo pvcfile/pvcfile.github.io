@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>QR Clipboard</title>
+
+  <style>
+
+    /* =====================================================
+       BIEN GIAO DIEN
+    ===================================================== */
+
+    :root {
+
+      --mauChinh: #6750A4;
+      --mauChinhNhe: #EADDFF;
+
+      --mauNen: #FDF8FF;
+      --mauThe: #FFFFFF;
+
+      --mauChu: #1D1B20;
+      --mauChuPhu: #49454F;
+
+      --mauVien: #79747E;
+
+      --mauNguyHiem: #BA1A1A;
+      --mauNguyHiemNhe: #FFDAD6;
+
+      --bongThe:
+        0 2px 8px rgba(0, 0, 0, .08);
+
+      --banKinhThe: 24px;
+      --banKinhNut: 100px;
+
+      --khoangCach: 16px;
+
+      --chieuRongToiDa: 720px;
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: var(--mauNen);
+
+      color: var(--mauChu);
+
+      -webkit-font-smoothing: antialiased;
+    }
+
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+
+    /* =====================================================
+       UNG DUNG
+    ===================================================== */
+
+    #ungDung {
+
+      width: 100%;
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: center;
+    }
+
+
+    #khungUngDung {
+
+      width: 100%;
+      max-width: var(--chieuRongToiDa);
+
+      min-height: 100vh;
+
+      padding:
+        20px
+        16px
+        calc(32px + env(safe-area-inset-bottom));
+    }
+
+
+    /* =====================================================
+       VIEW
+    ===================================================== */
+
+    .view {
+
+      display: none;
+
+      width: 100%;
+
+      animation:
+        hienView .2s ease;
+    }
+
+
+    .view.dangHien {
+      display: block;
+    }
+
+
+    @keyframes hienView {
+
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* =====================================================
+       DAU TRANG
+    ===================================================== */
+
+    .dauTrang {
+
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      margin-bottom: 20px;
+    }
+
+
+    .nutQuayLai {
+
+      width: 44px;
+      height: 44px;
+
+      border-radius: 50%;
+
+      background: transparent;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 24px;
+
+      color: var(--mauChu);
+    }
+
+
+    .nutQuayLai:hover {
+      background: rgba(0, 0, 0, .06);
+    }
+
+
+    .tieuDe {
+
+      margin: 0;
+
+      font-size: 24px;
+
+      font-weight: 700;
+
+      letter-spacing: -.4px;
+    }
+
+
+    .moTa {
+
+      margin: 4px 0 0;
+
+      color: var(--mauChuPhu);
+
+      font-size: 14px;
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    .manHinhBatDau {
+
+      min-height:
+        calc(100vh - 52px);
+
+      display: flex;
+      flex-direction: column;
+
+      justify-content: center;
+    }
+
+
+    .logo {
+
+      width: 72px;
+      height: 72px;
+
+      margin: 0 auto 20px;
+
+      border-radius: 24px;
+
+      background: var(--mauChinhNhe);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 38px;
+    }
+
+
+    .tieuDeBatDau {
+
+      text-align: center;
+
+      font-size: 32px;
+
+      margin: 0;
+    }
+
+
+    .moTaBatDau {
+
+      text-align: center;
+
+      color: var(--mauChuPhu);
+
+      margin:
+        8px
+        0
+        32px;
+    }
+
+
+    .luoiLuaChon {
+
+      display: grid;
+
+      grid-template-columns: 1fr;
+
+      gap: 16px;
+    }
+
+
+    .nutLuaChon {
+
+      min-height: 150px;
+
+      padding: 24px;
+
+      border-radius: var(--banKinhThe);
+
+      background: var(--mauThe);
+
+      box-shadow: var(--bongThe);
+
+      color: var(--mauChu);
+
+      text-align: left;
+
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease;
+    }
+
+
+    .nutLuaChon:hover {
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 6px 18px rgba(0, 0, 0, .12);
+    }
+
+
+    .bieuTuongLuaChon {
+
+      font-size: 38px;
+
+      margin-bottom: 18px;
+    }
+
+
+    .tieuDeLuaChon {
+
+      font-size: 19px;
+
+      font-weight: 700;
+    }
+
+
+    .moTaLuaChon {
+
+      color: var(--mauChuPhu);
+
+      margin-top: 6px;
+
+      font-size: 14px;
+    }
+
+
+    /* =====================================================
+       QR
+    ===================================================== */
+
+    .khuVucQR {
+
+      background: var(--mauThe);
+
+      border-radius: var(--banKinhThe);
+
+      padding: 20px;
+
+      box-shadow: var(--bongThe);
+
+      text-align: center;
+
+      margin-bottom: 20px;
+    }
+
+
+    .anhQR {
+
+      display: block;
+
+      width: min(100%, 320px);
+
+      aspect-ratio: 1 / 1;
+
+      object-fit: contain;
+
+      margin: auto;
+
+      border-radius: 12px;
+    }
+
+
+    .chuQR {
+
+      margin: 14px 0 0;
+
+      color: var(--mauChuPhu);
+
+      font-size: 14px;
+    }
+
+
+    /* =====================================================
+       DANH SACH
+    ===================================================== */
+
+    .tieuDeDanhSach {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      margin:
+        24px
+        0
+        12px;
+    }
+
+
+    .tieuDeDanhSach h2 {
+
+      margin: 0;
+
+      font-size: 20px;
+    }
+
+
+    .soLuong {
+
+      color: var(--mauChuPhu);
+
+      font-size: 14px;
+    }
+
+
+    #danhSachNoiDung {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 12px;
+
+      max-height: 52vh;
+
+      overflow-y: auto;
+
+      padding: 2px;
+    }
+
+
+    /* =====================================================
+       CARD NOI DUNG
+    ===================================================== */
+
+    .theNoiDung {
+
+      background: var(--mauThe);
+
+      border-radius: 18px;
+
+      box-shadow: var(--bongThe);
+
+      padding: 16px;
+
+      min-height: 150px;
+
+      display: flex;
+
+      flex-direction: column;
+    }
+
+
+    .thoiGian {
+
+      color: var(--mauChuPhu);
+
+      font-size: 13px;
+
+      font-weight: 600;
+
+      margin-bottom: 12px;
+    }
+
+
+    .noiDungCard {
+
+      flex: 1;
+
+      white-space: pre-wrap;
+
+      word-break: break-word;
+
+      overflow-wrap: anywhere;
+
+      max-height: 110px;
+
+      overflow-y: auto;
+
+      font-size: 15px;
+
+      line-height: 1.5;
+    }
+
+
+    .chanThe {
+
+      display: flex;
+
+      justify-content: flex-end;
+
+      margin-top: 14px;
+    }
+
+
+    .nutXoaNho {
+
+      min-height: 40px;
+
+      padding:
+        0
+        16px;
+
+      border-radius: 100px;
+
+      color: var(--mauNguyHiem);
+
+      background: var(--mauNguyHiemNhe);
+
+      font-weight: 600;
+    }
+
+
+    /* =====================================================
+       TEXTAREA
+    ===================================================== */
+
+    .theCopy {
+
+      background: var(--mauThe);
+
+      border-radius: var(--banKinhThe);
+
+      padding: 16px;
+
+      box-shadow: var(--bongThe);
+    }
+
+
+    #oNoiDung {
+
+      display: block;
+
+      width: 100%;
+
+      min-height: 55vh;
+
+      resize: vertical;
+
+      border: 1px solid #CAC4D0;
+
+      border-radius: 18px;
+
+      padding: 16px;
+
+      background: #FFFBFE;
+
+      color: var(--mauChu);
+
+      outline: none;
+
+      line-height: 1.5;
+
+      font-size: 16px;
+    }
+
+
+    #oNoiDung:focus {
+
+      border:
+        2px solid var(--mauChinh);
+    }
+
+
+    /* =====================================================
+       NUT
+    ===================================================== */
+
+    .hangNut {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 12px;
+
+      margin-top: 14px;
+    }
+
+
+    .nutChinh,
+    .nutPhu,
+    .nutXoaTatCa {
+
+      min-height: 52px;
+
+      padding:
+        0
+        22px;
+
+      border-radius: var(--banKinhNut);
+
+      font-weight: 700;
+
+      transition:
+        transform .1s ease,
+        opacity .1s ease;
+    }
+
+
+    .nutChinh {
+
+      background: var(--mauChinh);
+
+      color: white;
+    }
+
+
+    .nutPhu {
+
+      background: var(--mauChinhNhe);
+
+      color: #381E72;
+    }
+
+
+    .nutXoaTatCa {
+
+      width: 100%;
+
+      margin-top: 16px;
+
+      background: var(--mauNguyHiemNhe);
+
+      color: var(--mauNguyHiem);
+    }
+
+
+    .nutChinh:active,
+    .nutPhu:active,
+    .nutXoaTatCa:active {
+
+      transform: scale(.98);
+    }
+
+
+    button:disabled {
+
+      opacity: .5;
+
+      cursor: not-allowed;
+    }
+
+
+    /* =====================================================
+       TRONG
+    ===================================================== */
+
+    .trangTrong {
+
+      padding: 36px 20px;
+
+      text-align: center;
+
+      color: var(--mauChuPhu);
+    }
+
+
+    .trangTrongIcon {
+
+      font-size: 42px;
+
+      margin-bottom: 10px;
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    #toast {
+
+      position: fixed;
+
+      left: 50%;
+
+      bottom:
+        calc(24px + env(safe-area-inset-bottom));
+
+      transform:
+        translate(-50%, 20px);
+
+      z-index: 100;
+
+      width: max-content;
+
+      max-width:
+        calc(100vw - 32px);
+
+      padding:
+        12px
+        18px;
+
+      border-radius: 100px;
+
+      background: #322F35;
+
+      color: white;
+
+      font-size: 14px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        opacity .2s ease,
+        transform .2s ease;
+    }
+
+
+    #toast.dangHien {
+
+      opacity: 1;
+
+      transform:
+        translate(-50%, 0);
+    }
+
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    #lopLoading {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 200;
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        rgba(255, 255, 255, .55);
+
+      backdrop-filter:
+        blur(3px);
+    }
+
+
+    #lopLoading.dangHien {
+      display: flex;
+    }
+
+
+    .hopLoading {
+
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 20px 26px;
+
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, .15);
+
+      text-align: center;
+    }
+
+
+    .vongLoading {
+
+      width: 34px;
+
+      height: 34px;
+
+      margin: 0 auto 10px;
+
+      border:
+        3px solid #EADDFF;
+
+      border-top-color:
+        var(--mauChinh);
+
+      border-radius: 50%;
+
+      animation:
+        xoayLoading .8s linear infinite;
+    }
+
+
+    @keyframes xoayLoading {
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    /* =====================================================
+       DIALOG
+    ===================================================== */
+
+    #lopDialog {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 150;
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        rgba(0, 0, 0, .35);
+    }
+
+
+    #lopDialog.dangHien {
+      display: flex;
+    }
+
+
+    .hopDialog {
+
+      width: 100%;
+
+      max-width: 400px;
+
+      background: white;
+
+      border-radius: 24px;
+
+      padding: 24px;
+
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, .2);
+    }
+
+
+    .hopDialog h3 {
+
+      margin:
+        0
+        0
+        10px;
+
+      font-size: 20px;
+    }
+
+
+    .hopDialog p {
+
+      color: var(--mauChuPhu);
+
+      line-height: 1.5;
+    }
+
+
+    .nutDialog {
+
+      display: flex;
+
+      justify-content: flex-end;
+
+      gap: 8px;
+
+      margin-top: 22px;
+    }
+
+
+    /* =====================================================
+       DESKTOP
+    ===================================================== */
+
+    @media (min-width: 700px) {
+
+      #khungUngDung {
+
+        padding:
+          32px
+          24px
+          40px;
+      }
+
+
+      .luoiLuaChon {
+
+        grid-template-columns:
+          1fr
+          1fr;
+      }
+
+
+      #danhSachNoiDung {
+
+        max-height: 55vh;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div id="ungDung">
+
+  <main id="khungUngDung">
+
+
+    <!-- =================================================
+         VIEW 1
+    ================================================== -->
+
+    <section
+      id="viewBatDau"
+      class="view dangHien"
+    >
+
+      <div class="manHinhBatDau">
+
+        <div class="logo">
+          📋
+        </div>
+
+        <h1 class="tieuDeBatDau">
+          QR Clipboard
+        </h1>
+
+        <p class="moTaBatDau">
+          Chuyển nội dung nhanh giữa các thiết bị
+        </p>
+
+
+        <div class="luoiLuaChon">
+
+
+          <button
+            class="nutLuaChon"
+            onclick="moView('maQR')"
+          >
+
+            <div class="bieuTuongLuaChon">
+              ▦
+            </div>
+
+            <div class="tieuDeLuaChon">
+              Mã QR & Kết quả
+            </div>
+
+            <div class="moTaLuaChon">
+              Hiển thị QR và các nội dung đã lưu
+            </div>
+
+          </button>
+
+
+          <button
+            class="nutLuaChon"
+            onclick="moView('saoChep')"
+          >
+
+            <div class="bieuTuongLuaChon">
+              📋
+            </div>
+
+            <div class="tieuDeLuaChon">
+              Copy nội dung
+            </div>
+
+            <div class="moTaLuaChon">
+              Lấy nội dung từ Clipboard và lưu lại
+            </div>
+
+          </button>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         VIEW 2
+    ================================================== -->
+
+    <section
+      id="viewMaQR"
+      class="view"
+    >
+
+      <div class="dauTrang">
+
+        <button
+          class="nutQuayLai"
+          onclick="moView('batDau')"
+        >
+          ←
+        </button>
+
+        <div>
+
+          <h1 class="tieuDe">
+            Mã QR
+          </h1>
+
+          <p class="moTa">
+            Quét mã bằng Zalo hoặc camera
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="khuVucQR">
+
+        <!--
+          THAY URL_ANH_QR BANG URL ANH QR CUA BAN
+        -->
+
+        <img
+          id="anhQR"
+          class="anhQR"
+          src="URL_ANH_QR"
+          alt="Mã QR"
+        >
+
+        <p class="chuQR">
+          Quét mã QR để mở màn hình Copy nội dung
+        </p>
+
+      </div>
+
+
+      <div class="tieuDeDanhSach">
+
+        <h2>
+          Nội dung đã copy
+        </h2>
+
+        <span
+          id="soLuongNoiDung"
+          class="soLuong"
+        >
+          0 nội dung
+        </span>
+
+      </div>
+
+
+      <div id="danhSachNoiDung"></div>
+
+
+      <button
+        id="nutXoaTatCa"
+        class="nutXoaTatCa"
+        onclick="moDialogXoaTatCa()"
+      >
+        Xóa toàn bộ
+      </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         VIEW 3
+    ================================================== -->
+
+    <section
+      id="viewSaoChep"
+      class="view"
+    >
+
+      <div class="dauTrang">
+
+        <button
+          class="nutQuayLai"
+          onclick="moView('batDau')"
+        >
+          ←
+        </button>
+
+        <div>
+
+          <h1 class="tieuDe">
+            Copy nội dung
+          </h1>
+
+          <p class="moTa">
+            Nội dung Clipboard sẽ được đưa vào đây
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="theCopy">
+
+        <textarea
+          id="oNoiDung"
+          placeholder="Nội dung Clipboard sẽ xuất hiện ở đây..."
+          spellcheck="false"
+        ></textarea>
+
+
+        <div class="hangNut">
+
+          <button
+            id="nutLuu"
+            class="nutChinh"
+            onclick="luuNoiDung()"
+          >
+            Lưu
+          </button>
+
+
+          <button
+            id="nutXoa"
+            class="nutPhu"
+            onclick="xoaNoiDungNhap()"
+          >
+            Xóa
+          </button>
+
+        </div>
+
+
+        <button
+          id="nutDanClipboard"
+          class="nutPhu"
+          style="width:100%; margin-top:12px;"
+          onclick="docClipboard()"
+        >
+          Dán từ Clipboard
+        </button>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOAST
+====================================================== -->
+
+<div id="toast"></div>
+
+
+
+<!-- =====================================================
+     LOADING
+====================================================== -->
+
+<div id="lopLoading">
+
+  <div class="hopLoading">
+
+    <div class="vongLoading"></div>
+
+    <div id="chuLoading">
+      Đang xử lý...
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     DIALOG
+====================================================== -->
+
+<div id="lopDialog">
+
+  <div class="hopDialog">
+
+    <h3 id="tieuDeDialog">
+      Xác nhận
+    </h3>
+
+    <p id="noiDungDialog">
+      Bạn có chắc chắn không?
+    </p>
+
+    <div class="nutDialog">
+
+      <button
+        class="nutPhu"
+        onclick="dongDialog()"
+      >
+        Hủy
+      </button>
+
+      <button
+        id="nutXacNhanDialog"
+        class="nutChinh"
+      >
+        Xác nhận
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+  /* =====================================================
+     CAU HINH
+  ===================================================== */
+
+  const APP = {
+
+    state: {
+
+      viewHienTai: 'batDau',
+
+      danhSachNoiDung: [],
+
+      dangXuLy: false
+
+    },
+
+    ui: {}
+
+  };
+
+
+  /* =====================================================
+     TIEN ICH
+  ===================================================== */
+
+  function layPhanTu(id) {
+    return document.getElementById(id);
+  }
+
+
+  function hienLoading(thongBao = 'Đang xử lý...') {
+
+    layPhanTu('chuLoading').textContent =
+      thongBao;
+
+    layPhanTu('lopLoading')
+      .classList
+      .add('dangHien');
+  }
+
+
+  function anLoading() {
+
+    layPhanTu('lopLoading')
+      .classList
+      .remove('dangHien');
+  }
+
+
+  let boDemToast = null;
+
+
+  function hienToast(thongBao) {
+
+    const toast =
+      layPhanTu('toast');
+
+    toast.textContent =
+      thongBao;
+
+    toast.classList.add('dangHien');
+
+    clearTimeout(boDemToast);
+
+    boDemToast =
+      setTimeout(() => {
+
+        toast.classList.remove(
+          'dangHien'
+        );
+
+      }, 2600);
+  }
+
+
+  function dinhDangHaiSo(so) {
+
+    return String(so)
+      .padStart(2, '0');
+  }
+
+
+  function dinhDangThoiGian(duLieu) {
+
+    return [
+      dinhDangHaiSo(duLieu.ngay),
+      dinhDangHaiSo(duLieu.thang),
+      duLieu.nam
+    ].join('/') +
+    ' · ' +
+    [
+      dinhDangHaiSo(duLieu.gio),
+      dinhDangHaiSo(duLieu.phut),
+      dinhDangHaiSo(duLieu.giay)
+    ].join(':');
+  }
+
+
+  /* =====================================================
+     DIEU HUONG VIEW
+  ===================================================== */
+
+  function moView(tenView) {
+
+    const danhSachView = {
+
+      batDau:
+        layPhanTu('viewBatDau'),
+
+      maQR:
+        layPhanTu('viewMaQR'),
+
+      saoChep:
+        layPhanTu('viewSaoChep')
+
+    };
+
+
+    Object.values(danhSachView)
+      .forEach(view => {
+
+        view.classList.remove(
+          'dangHien'
+        );
+
+      });
+
+
+    if (!danhSachView[tenView]) {
+      return;
+    }
+
+
+    danhSachView[tenView]
+      .classList
+      .add('dangHien');
+
+
+    APP.state.viewHienTai =
+      tenView;
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+
+    if (tenView === 'maQR') {
+
+      taiDanhSachNoiDung();
+
+    }
+
+
+    if (tenView === 'saoChep') {
+
+      thuDocClipboardTuDong();
+
+    }
+
+  }
+
+
+  /* =====================================================
+     CLIPBOARD
+  ===================================================== */
+
+  async function thuDocClipboardTuDong() {
+
+    /*
+      Clipboard API có thể bị trình duyệt
+      từ chối nếu không có thao tác người dùng.
+
+      Vì vậy chỉ thử đọc.
+      Nếu thất bại thì không làm ứng dụng lỗi.
+    */
+
+    try {
+
+      if (
+        !navigator.clipboard ||
+        !navigator.clipboard.readText
+      ) {
+
+        return;
+
+      }
+
+
+      const noiDung =
+        await navigator.clipboard.readText();
+
+
+      if (
+        noiDung &&
+        !layPhanTu('oNoiDung').value
+      ) {
+
+        layPhanTu('oNoiDung').value =
+          noiDung;
+
+        hienToast(
+          'Đã lấy nội dung từ Clipboard'
+        );
+
+      }
+
+    }
+    catch (loi) {
+
+      console.log(
+        'Không thể tự động đọc Clipboard:',
+        loi
+      );
+
+    }
+
+  }
+
+
+  async function docClipboard() {
+
+    try {
+
+      if (
+        !navigator.clipboard ||
+        !navigator.clipboard.readText
+      ) {
+
+        hienToast(
+          'Trình duyệt không hỗ trợ Clipboard'
+        );
+
+        return;
+
+      }
+
+
+      const noiDung =
+        await navigator.clipboard.readText();
+
+
+      layPhanTu('oNoiDung').value =
+        noiDung || '';
+
+
+      if (noiDung) {
+
+        hienToast(
+          'Đã dán nội dung từ Clipboard'
+        );
+
+      }
+      else {
+
+        hienToast(
+          'Clipboard đang trống'
+        );
+
+      }
+
+    }
+    catch (loi) {
+
+      console.error(loi);
+
+      hienToast(
+        'Trình duyệt không cho phép đọc Clipboard'
+      );
+
+    }
+
+  }
+
+
+  async function xoaClipboard() {
+
+    try {
+
+      if (
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+      ) {
+
+        await navigator.clipboard.writeText('');
+
+        return true;
+
+      }
+
+    }
+    catch (loi) {
+
+      console.log(
+        'Không thể xóa Clipboard:',
+        loi
+      );
+
+    }
+
+    return false;
+
+  }
+
+
+  /* =====================================================
+     XOA TEXTAREA
+  ===================================================== */
+
+  async function xoaNoiDungNhap() {
+
+    layPhanTu('oNoiDung').value = '';
+
+    const daXoa =
+      await xoaClipboard();
+
+
+    if (daXoa) {
+
+      hienToast(
+        'Đã xóa nội dung và Clipboard'
+      );
+
+    }
+    else {
+
+      hienToast(
+        'Đã xóa nội dung'
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     LUU NOI DUNG
+  ===================================================== */
+
+  function luuNoiDung() {
+
+    if (APP.state.dangXuLy) {
+      return;
+    }
+
+
+    const noiDung =
+      layPhanTu('oNoiDung')
+        .value;
+
+
+    if (!noiDung.trim()) {
+
+      hienToast(
+        'Nội dung không được để trống'
+      );
+
+      return;
+
+    }
+
+
+    APP.state.dangXuLy =
+      true;
+
+
+    layPhanTu('nutLuu')
+      .disabled = true;
+
+
+    hienLoading(
+      'Đang lưu nội dung...'
+    );
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function(ketQua) {
+
+          APP.state.dangXuLy =
+            false;
+
+          layPhanTu('nutLuu')
+            .disabled = false;
+
+          anLoading();
+
+
+          if (!ketQua || !ketQua.thanhCong) {
+
+            hienToast(
+              'Không thể lưu nội dung'
+            );
+
+            return;
+
+          }
+
+
+          layPhanTu('oNoiDung')
+            .value = '';
+
+
+          hienToast(
+            '✓ Đã lưu nội dung'
+          );
+
+        }
+      )
+
+      .withFailureHandler(
+        function(loi) {
+
+          APP.state.dangXuLy =
+            false;
+
+          layPhanTu('nutLuu')
+            .disabled = false;
+
+          anLoading();
+
+
+          console.error(loi);
+
+          hienToast(
+            'Không thể lưu nội dung'
+          );
+
+        }
+      )
+
+      .luuNoiDung(noiDung);
+
+  }
+
+
+  /* =====================================================
+     TAI DANH SACH
+  ===================================================== */
+
+  function taiDanhSachNoiDung() {
+
+    hienLoading(
+      'Đang tải dữ liệu...'
+    );
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function(danhSach) {
+
+          anLoading();
+
+
+          APP.state.danhSachNoiDung =
+            danhSach || [];
+
+
+          veDanhSachNoiDung();
+
+        }
+      )
+
+      .withFailureHandler(
+        function(loi) {
+
+          anLoading();
+
+          console.error(loi);
+
+          hienToast(
+            'Không thể tải dữ liệu'
+          );
+
+        }
+      )
+
+      .layDanhSachNoiDung();
+
+  }
+
+
+  /* =====================================================
+     VE DANH SACH
+  ===================================================== */
+
+  function veDanhSachNoiDung() {
+
+    const khung =
+      layPhanTu(
+        'danhSachNoiDung'
+      );
+
+
+    const danhSach =
+      APP.state.danhSachNoiDung;
+
+
+    layPhanTu(
+      'soLuongNoiDung'
+    ).textContent =
+      danhSach.length +
+      ' nội dung';
+
+
+    khung.innerHTML = '';
+
+
+    if (!danhSach.length) {
+
+      khung.innerHTML = `
+
+        <div class="trangTrong">
+
+          <div class="trangTrongIcon">
+            📭
+          </div>
+
+          <div>
+            Chưa có nội dung nào
+          </div>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    danhSach.forEach(duLieu => {
+
+      const the =
+        document.createElement('article');
+
+      the.className =
+        'theNoiDung';
+
+
+      const thoiGian =
+        document.createElement('div');
+
+      thoiGian.className =
+        'thoiGian';
+
+      thoiGian.textContent =
+        dinhDangThoiGian(duLieu);
+
+
+      const noiDung =
+        document.createElement('div');
+
+      noiDung.className =
+        'noiDungCard';
+
+      noiDung.textContent =
+        duLieu.noiDung;
+
+
+      const chanThe =
+        document.createElement('div');
+
+      chanThe.className =
+        'chanThe';
+
+
+      const nutXoa =
+        document.createElement('button');
+
+      nutXoa.className =
+        'nutXoaNho';
+
+      nutXoa.textContent =
+        'Xóa';
+
+
+      nutXoa.onclick =
+        () => moDialogXoa(
+          duLieu.id
+        );
+
+
+      chanThe.appendChild(
+        nutXoa
+      );
+
+
+      the.appendChild(
+        thoiGian
+      );
+
+      the.appendChild(
+        noiDung
+      );
+
+      the.appendChild(
+        chanThe
+      );
+
+
+      khung.appendChild(
+        the
+      );
+
+    });
+
+  }
+
+
+  /* =====================================================
+     DIALOG
+  ===================================================== */
+
+  function moDialogXoa(id) {
+
+    layPhanTu(
+      'tieuDeDialog'
+    ).textContent =
+      'Xóa nội dung';
+
+
+    layPhanTu(
+      'noiDungDialog'
+    ).textContent =
+      'Bạn có chắc muốn xóa nội dung này?';
+
+
+    layPhanTu(
+      'nutXacNhanDialog'
+    ).onclick =
+      () => {
+
+        dongDialog();
+
+        xoaNoiDung(id);
+
+      };
+
+
+    layPhanTu(
+      'lopDialog'
+    ).classList.add(
+      'dangHien'
+    );
+
+  }
+
+
+  function moDialogXoaTatCa() {
+
+    if (
+      !APP.state.danhSachNoiDung.length
+    ) {
+
+      hienToast(
+        'Không có nội dung để xóa'
+      );
+
+      return;
+
+    }
+
+
+    layPhanTu(
+      'tieuDeDialog'
+    ).textContent =
+      'Xóa toàn bộ';
+
+
+    layPhanTu(
+      'noiDungDialog'
+    ).textContent =
+      'Bạn có chắc muốn xóa toàn bộ nội dung không?';
+
+
+    layPhanTu(
+      'nutXacNhanDialog'
+    ).onclick =
+      () => {
+
+        dongDialog();
+
+        xoaTatCaNoiDung();
+
+      };
+
+
+    layPhanTu(
+      'lopDialog'
+    ).classList.add(
+      'dangHien'
+    );
+
+  }
+
+
+  function dongDialog() {
+
+    layPhanTu(
+      'lopDialog'
+    ).classList.remove(
+      'dangHien'
+    );
+
+  }
+
+
+  /* =====================================================
+     XOA MOT NOI DUNG
+  ===================================================== */
+
+  function xoaNoiDung(id) {
+
+    hienLoading(
+      'Đang xóa...'
+    );
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function(ketQua) {
+
+          anLoading();
+
+
+          if (ketQua) {
+
+            hienToast(
+              '✓ Đã xóa nội dung'
+            );
+
+            taiDanhSachNoiDung();
+
+          }
+          else {
+
+            hienToast(
+              'Không tìm thấy nội dung'
+            );
+
+          }
+
+        }
+      )
+
+      .withFailureHandler(
+        function(loi) {
+
+          anLoading();
+
+          console.error(loi);
+
+          hienToast(
+            'Không thể xóa nội dung'
+          );
+
+        }
+      )
+
+      .xoaNoiDung(id);
+
+  }
+
+
+  /* =====================================================
+     XOA TOAN BO
+  ===================================================== */
+
+  function xoaTatCaNoiDung() {
+
+    hienLoading(
+      'Đang xóa toàn bộ...'
+    );
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function() {
+
+          anLoading();
+
+
+          APP.state.danhSachNoiDung =
+            [];
+
+
+          veDanhSachNoiDung();
+
+
+          hienToast(
+            '✓ Đã xóa toàn bộ'
+          );
+
+        }
+      )
+
+      .withFailureHandler(
+        function(loi) {
+
+          anLoading();
+
+          console.error(loi);
+
+          hienToast(
+            'Không thể xóa toàn bộ'
+          );
+
+        }
+      )
+
+      .xoaTatCaNoiDung();
+
+  }
+
+
+  /* =====================================================
+     KHOI DONG
+  ===================================================== */
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    function() {
+
+      /*
+        Không tự đọc Clipboard ngay khi
+        mở View Start.
+
+        Chỉ đọc khi người dùng đi vào
+        View Copy.
+      */
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
