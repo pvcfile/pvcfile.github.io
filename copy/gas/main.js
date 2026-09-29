@@ -179,3 +179,86 @@ function xoaTatCaNoiDung() {
 
   return true;
 }
+
+
+
+function layTrangThaiDaScanQr() {
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName('state');
+
+  if (!sheet) {
+    throw new Error('Không tìm thấy sheet state.');
+  }
+
+  const duLieu = sheet.getDataRange().getValues();
+
+  for (let i = 1; i < duLieu.length; i++) {
+
+    if (String(duLieu[i][0]).trim() === 'daScanQr') {
+
+      return {
+        daScanQr:
+          Number(duLieu[i][1]) === 1 ? 1 : 0
+      };
+
+    }
+
+  }
+
+  throw new Error(
+    'Không tìm thấy biến daScanQr.'
+  );
+
+}
+
+
+
+function xuLyDaScanQrKhiLoad() {
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName('state');
+
+  if (!sheet) {
+    throw new Error('Không tìm thấy sheet state.');
+  }
+
+  const duLieu = sheet.getDataRange().getValues();
+
+  let dongDaScan = -1;
+
+  for (let i = 1; i < duLieu.length; i++) {
+
+    if (String(duLieu[i][0]).trim() === 'daScanQr') {
+      dongDaScan = i + 1;
+      break;
+    }
+
+  }
+
+  if (dongDaScan === -1) {
+    throw new Error('Không tìm thấy biến daScanQr.');
+  }
+
+  const giaTriCu = Number(
+    sheet.getRange(dongDaScan, 2).getValue()
+  ) === 1 ? 1 : 0;
+
+  const giaTriMoi = giaTriCu === 0 ? 1 : 0;
+
+  sheet
+    .getRange(dongDaScan, 2)
+    .setValue(giaTriMoi);
+
+  return {
+    thanhCong: true,
+    daScanQr: giaTriMoi
+  };
+
+}
+
+
+
+
